@@ -25,4 +25,6 @@ dependencyResolutionManagement {
 rootProject.name = "QueenGambit"
 include(":app")
 include(":styleguide")
+include(":board:api")
+include(":board:impl")
  
