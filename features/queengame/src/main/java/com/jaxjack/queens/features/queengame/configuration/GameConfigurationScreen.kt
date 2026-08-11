@@ -37,7 +37,10 @@ import kotlin.math.floor
 
 
 @Composable
-fun GameConfigurationScreen(modifier: Modifier) {
+internal fun GameConfigurationScreen(
+    modifier: Modifier,
+    onPlayClick: () -> Unit,
+) {
     val viewModel: GameConfigurationViewModel = hiltViewModel()
 
     val minimumBoxSize = 48.dp
@@ -60,7 +63,8 @@ fun GameConfigurationScreen(modifier: Modifier) {
         modifier = modifier,
         params = params,
         onDecreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.DecreaseButtonClick) },
-        onIncreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.IncreaseButtonClick) }
+        onIncreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.IncreaseButtonClick) },
+        onPlayClick = onPlayClick
     )
 }
 
@@ -70,6 +74,7 @@ private fun QueenGameContent(
     params: GameConfigurationParams,
     onDecreaseBoardSizeButtonClick: () -> Unit,
     onIncreaseBoardSizeButtonClick: () -> Unit,
+    onPlayClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -100,9 +105,7 @@ private fun QueenGameContent(
                 disabledContainerColor = MaterialTheme.colorScheme.tertiary,
                 disabledContentColor = MaterialTheme.colorScheme.onTertiary
             ),
-            onClick = {
-                // TODO implement play button action
-            },
+            onClick = onPlayClick,
             content = {
                 Text(
                     text = stringResource(R.string.game_configuration_play_button),

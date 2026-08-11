@@ -8,8 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.jaxjack.queens.features.queengame.configuration.GameConfigurationScreen
-import com.jaxjack.queens.features.queengame.game.QueenGameScreen
+import com.jaxjack.queens.navigation.QueensNavDisplay
 import com.jaxjack.queens.styleguide.theme.QueensTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             QueensTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    GameConfigurationScreen(modifier = Modifier.padding(innerPadding))
+                    QueensNavDisplay(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
