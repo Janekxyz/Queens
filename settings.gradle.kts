@@ -22,9 +22,10 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "QueenGambit"
+rootProject.name = "Queens"
 include(":app")
 include(":styleguide")
 include(":board:api")
 include(":board:impl")
+include(":features:queengame")
  
