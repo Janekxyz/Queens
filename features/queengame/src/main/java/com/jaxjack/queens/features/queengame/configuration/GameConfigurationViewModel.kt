@@ -25,7 +25,7 @@ class GameConfigurationViewModel @Inject constructor() : ViewModel() {
             val newBoardSize = (state.boardSize + change)
                 .coerceIn(MIN_BOARD_SIZE, state.maximumBoardSize)
 
-            state.copy(boardSize = newBoardSize,)
+            state.copy(boardSize = newBoardSize)
         }
     }
 
@@ -38,7 +38,7 @@ class GameConfigurationViewModel @Inject constructor() : ViewModel() {
 private const val MIN_BOARD_SIZE = 4
 
 data class GameConfigurationViewState(
-    val boardSize: Int = 4,
+    val boardSize: Int = MIN_BOARD_SIZE,
     val maximumBoardSize: Int = 8,
 ) {
     val decreaseButtonEnabled: Boolean = boardSize > MIN_BOARD_SIZE
