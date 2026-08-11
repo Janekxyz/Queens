@@ -1,4 +1,4 @@
-package com.jaxjack.queengambit.styleguide.theme
+package com.jaxjack.queens.styleguide.theme.base
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

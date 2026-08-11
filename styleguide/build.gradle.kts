@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jaxjack.queengambit.styleguide"
+    namespace = "com.jaxjack.queens.styleguide"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
