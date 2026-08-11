@@ -1,4 +1,4 @@
-package com.jaxjack.queengambit
+package com.jaxjack.queens
 
 import org.junit.Test
 

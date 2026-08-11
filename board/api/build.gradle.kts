@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jaxjack.queengambit.board.api"
+    namespace = "com.jaxjack.queens.board.api"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
