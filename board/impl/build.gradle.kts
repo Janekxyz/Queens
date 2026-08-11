@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.jaxjack.queengambit.board.impl"
+    namespace = "com.jaxjack.queens.board.impl"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -25,5 +27,7 @@ android {
 dependencies {
     // `api` so a consumer wiring up :board:impl also sees the contract types it returns.
     api(project(":board:api"))
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
     testImplementation(libs.junit)
 }
