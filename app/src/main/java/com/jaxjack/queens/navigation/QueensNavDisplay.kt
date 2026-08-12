@@ -26,9 +26,11 @@ fun QueensNavDisplay(modifier: Modifier = Modifier) {
         ),
         entryProvider = entryProvider {
             gameConfigurationEntry(
-                onPlayClick = { backStack.add(QueenGameKey) },
+                onPlayClick = { backStack.add(QueenGameKey(boardSize = it)) },
             )
-            queenGameEntry()
+            queenGameEntry(
+                onBackClick = { backStack.removeLastOrNull() }
+            )
         },
     )
 }

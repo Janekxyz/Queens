@@ -31,7 +31,7 @@ android {
 
 dependencies {
     implementation(project(":styleguide"))
-    implementation(project(":board:api"))
+    implementation(project(":board"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

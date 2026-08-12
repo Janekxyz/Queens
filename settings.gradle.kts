@@ -25,7 +25,6 @@ dependencyResolutionManagement {
 rootProject.name = "Queens"
 include(":app")
 include(":styleguide")
-include(":board:api")
-include(":board:impl")
+include(":board")
 include(":features:queengame")
  

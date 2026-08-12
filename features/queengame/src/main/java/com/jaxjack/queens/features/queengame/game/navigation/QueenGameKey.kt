@@ -4,4 +4,4 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object QueenGameKey : NavKey
+data class QueenGameKey(val boardSize: Int) : NavKey

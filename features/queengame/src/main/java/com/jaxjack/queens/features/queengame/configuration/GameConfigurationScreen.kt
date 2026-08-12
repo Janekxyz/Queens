@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -30,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jaxjack.queens.styleguide.R
@@ -39,15 +45,16 @@ import kotlin.math.floor
 @Composable
 internal fun GameConfigurationScreen(
     modifier: Modifier,
-    onPlayClick: () -> Unit,
+    onPlayClick: (Int) -> Unit,
 ) {
     val viewModel: GameConfigurationViewModel = hiltViewModel()
 
     val minimumBoxSize = 48.dp
     val (screenWidth, screenHeight) = LocalWindowInfo.current.containerDpSize
 
+    // Calculate the maximum of the squares that would fit into the screen
     LaunchedEffect(Unit) {
-        val biggerValue = if (screenWidth < screenHeight) screenWidth else screenHeight
+        val biggerValue = min(screenWidth, screenHeight)
         val maximumSizeOfBoard = floor(biggerValue / minimumBoxSize).toInt()
         viewModel.onAction(
             GameConfigurationAction.ConfigMaximumBoardSizeForScreen(
@@ -64,7 +71,7 @@ internal fun GameConfigurationScreen(
         params = params,
         onDecreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.DecreaseButtonClick) },
         onIncreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.IncreaseButtonClick) },
-        onPlayClick = onPlayClick
+        onPlayClick = { onPlayClick(state.boardSize) }
     )
 }
 
@@ -77,7 +84,7 @@ private fun QueenGameContent(
     onPlayClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.statusBars))
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
