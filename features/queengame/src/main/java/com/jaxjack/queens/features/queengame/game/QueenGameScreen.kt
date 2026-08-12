@@ -48,6 +48,7 @@ internal fun QueenGameScreen(
         modifier = modifier,
         params = params,
         onBackClick = onBackClick,
+        onRestartClick = { viewModel.onAction(QueenGameAction.RestartClick) },
         onTileClick = { viewModel.onAction(QueenGameAction.TileClick(it)) }
     )
 }
@@ -58,6 +59,7 @@ private fun QueenGameContent(
     modifier: Modifier,
     params: QueenGameParams,
     onBackClick: () -> Unit,
+    onRestartClick: () -> Unit,
     onTileClick: (BoardPosition) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -67,6 +69,16 @@ private fun QueenGameContent(
                 IconButton(onClick = onBackClick) {
                     Icon(
                         painter = painterResource(R.drawable.ic_back),
+                        // TODO implement content description
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryFixed
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = onRestartClick) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_restart),
                         // TODO implement content description
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimaryFixed

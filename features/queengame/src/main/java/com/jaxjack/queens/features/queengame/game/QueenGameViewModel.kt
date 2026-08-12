@@ -24,18 +24,16 @@ class QueenGameViewModel @AssistedInject constructor(
         fun create(key: QueenGameKey): QueenGameViewModel
     }
 
-    private val _viewState = MutableStateFlow(
-        QueenGameViewState(
-            board = Board.create(route.boardSize),
-            queens = emptySet(),
-            queenAttackMap = QueenAttackMap.of(size = route.boardSize, queens = emptySet())
-        )
-    )
+    private val _viewState = MutableStateFlow(initialState())
     val viewState: StateFlow<QueenGameViewState> = _viewState.asStateFlow()
 
-
     fun onAction(action: QueenGameAction) = when (action) {
+        QueenGameAction.RestartClick -> restart()
         is QueenGameAction.TileClick -> handleTileClick(action.position)
+    }
+
+    private fun restart() {
+        _viewState.update { initialState() }
     }
 
     private fun handleTileClick(position: BoardPosition) {
@@ -61,6 +59,12 @@ class QueenGameViewModel @AssistedInject constructor(
             )
         }
     }
+
+    private fun initialState(): QueenGameViewState = QueenGameViewState(
+        board = Board.create(route.boardSize),
+        queens = emptySet(),
+        queenAttackMap = QueenAttackMap.of(size = route.boardSize, queens = emptySet())
+    )
 }
 
 data class QueenGameViewState(
@@ -70,5 +74,6 @@ data class QueenGameViewState(
 )
 
 sealed interface QueenGameAction {
+    data object RestartClick : QueenGameAction
     data class TileClick(val position: BoardPosition) : QueenGameAction
 }
