@@ -1,6 +1,13 @@
 package com.jaxjack.queens.features.queengame.configuration
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,14 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
 import kotlin.math.floor
 
 
 @Composable
 internal fun GameConfigurationScreen(
     modifier: Modifier,
-    onPlayClick: (Int) -> Unit,
+    onPlayClick: (Int, QueenColor) -> Unit,
 ) {
     val viewModel: GameConfigurationViewModel = hiltViewModel()
 
@@ -71,7 +80,8 @@ internal fun GameConfigurationScreen(
         params = params,
         onDecreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.DecreaseButtonClick) },
         onIncreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.IncreaseButtonClick) },
-        onPlayClick = { onPlayClick(state.boardSize) }
+        onQueenColorClick = { viewModel.onAction(GameConfigurationAction.QueenColorClick(it)) },
+        onPlayClick = { onPlayClick(state.boardSize, state.queenColor) }
     )
 }
 
@@ -81,6 +91,7 @@ private fun QueenGameContent(
     params: GameConfigurationParams,
     onDecreaseBoardSizeButtonClick: () -> Unit,
     onIncreaseBoardSizeButtonClick: () -> Unit,
+    onQueenColorClick: (QueenColor) -> Unit,
     onPlayClick: () -> Unit,
 ) {
     Column(
@@ -97,6 +108,12 @@ private fun QueenGameContent(
             increaseButtonEnabled = params.increaseButtonEnabled,
             onDecreaseBoardSizeButtonClick = onDecreaseBoardSizeButtonClick,
             onIncreaseBoardSizeButtonClick = onIncreaseBoardSizeButtonClick
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+
+        QueenColorContent(
+            options = params.queenColorOptions,
+            onQueenColorClick = onQueenColorClick
         )
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -174,6 +191,58 @@ private fun ConfigureBoardContent(
 }
 
 @Composable
+private fun QueenColorContent(
+    options: List<QueenColorOptionParams>,
+    onQueenColorClick: (QueenColor) -> Unit,
+) {
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(R.string.game_configuration_queen_color),
+        style = MaterialTheme.typography.headlineLarge.copy(
+            textAlign = TextAlign.Center
+        )
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        options.forEach { option ->
+            QueenColorOption(
+                params = option,
+                onClick = { onQueenColorClick(option.queenColor) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun QueenColorOption(
+    params: QueenColorOptionParams,
+    onClick: () -> Unit,
+) {
+    val borderColor by animateColorAsState(params.borderColor)
+    val shape = RoundedCornerShape(8.dp)
+    Box(
+        modifier = Modifier
+            .size(72.dp)
+            .clip(shape)
+            .background(color = params.backgroundColor)
+            .border(width = 4.dp, color = borderColor, shape = shape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier.fillMaxSize(0.7f),
+            painter = painterResource(R.drawable.ic_queen),
+            contentDescription = params.contentDescription,
+            tint = params.tint
+        )
+    }
+}
+
+@Composable
 fun BoardSizeChangeButton(
     icon: Painter,
     containerColor: Color,
@@ -203,5 +272,14 @@ data class GameConfigurationParams(
     val decreaseButtonContainerColor: Color,
     val decreaseButtonEnabled: Boolean,
     val increaseButtonContainerColor: Color,
-    val increaseButtonEnabled: Boolean
+    val increaseButtonEnabled: Boolean,
+    val queenColorOptions: List<QueenColorOptionParams>
+)
+
+data class QueenColorOptionParams(
+    val queenColor: QueenColor,
+    val backgroundColor: Color,
+    val tint: Color,
+    val borderColor: Color,
+    val contentDescription: String
 )

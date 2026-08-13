@@ -2,6 +2,13 @@ package com.jaxjack.queens.features.queengame.configuration
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.jaxjack.queens.features.queengame.QueenColor
+import com.jaxjack.queens.features.queengame.tint
+import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
+import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
 
 @Composable
 fun GameConfigurationViewState.toParams(): GameConfigurationParams {
@@ -18,6 +25,28 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
         } else {
             MaterialTheme.colorScheme.tertiary
         },
-        increaseButtonEnabled = increaseButtonEnabled
+        increaseButtonEnabled = increaseButtonEnabled,
+        queenColorOptions = QueenColor.entries.map { color ->
+            QueenColorOptionParams(
+                queenColor = color,
+                tint = color.tint,
+                backgroundColor = when(color) {
+                    QueenColor.White -> boardTileGreen
+                    QueenColor.Black -> boardTileWhite
+                },
+                borderColor = if (color == queenColor) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    Color.Transparent
+                },
+                contentDescription = stringResource(color.contentDescription),
+            )
+        }
     )
 }
+
+private val QueenColor.contentDescription: Int
+    get() = when (this) {
+        QueenColor.White -> R.string.game_configuration_queen_color_white
+        QueenColor.Black -> R.string.game_configuration_queen_color_black
+    }

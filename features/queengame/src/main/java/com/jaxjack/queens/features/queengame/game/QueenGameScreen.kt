@@ -10,15 +10,19 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -28,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jaxjack.queens.board.BoardPosition
 import com.jaxjack.queens.board.ui.BoardContent
@@ -64,7 +69,7 @@ private fun QueenGameContent(
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         TopAppBar(
-            windowInsets = WindowInsets.navigationBars.union(WindowInsets.statusBars),
+            windowInsets = WindowInsets.statusBars,
             navigationIcon = {
                 IconButton(onClick = onBackClick) {
                     Icon(
@@ -85,10 +90,27 @@ private fun QueenGameContent(
                     )
                 }
             },
-            title = {}
+            title = {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier.size(36.dp),
+                        painter = painterResource(R.drawable.ic_queen),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = params.headerParams.queensUsed,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
+            }
         )
 
-        // Board
         BoardContent(
             params = params.boardParams,
             cell = { position ->
@@ -125,6 +147,7 @@ private fun BoxScope.QueenGameTileContent(
                 Icon(
                     modifier = Modifier.fillMaxSize(0.8f),
                     painter = params.icon,
+                    tint = params.iconTint,
                     contentDescription = null
                 )
             }
@@ -134,12 +157,19 @@ private fun BoxScope.QueenGameTileContent(
 
 @Immutable
 data class QueenGameParams(
+    val headerParams: QueenGameHeaderParams,
     val boardParams: BoardParams,
     val tiles: Map<BoardPosition, QueenGameTileParams>
 )
 
 @Immutable
+data class QueenGameHeaderParams(
+    val queensUsed: String
+)
+
+@Immutable
 data class QueenGameTileParams(
     val icon: Painter?,
+    val iconTint: Color,
     val backgroundColor: Color
 )

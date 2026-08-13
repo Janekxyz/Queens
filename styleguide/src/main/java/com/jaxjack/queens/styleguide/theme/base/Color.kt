@@ -12,3 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val boardTileGreen = Color(0xFF7D945E)
 val boardTileWhite = Color(0xFFEBEDD4)
+
+val queenWhite = Color(0xFFFAFAF5)
+val queenBlack = Color(0xFF1F2115)

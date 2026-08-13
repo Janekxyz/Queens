@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.jaxjack.queens.board.ui.BoardParams
+import com.jaxjack.queens.features.queengame.tint
 import com.jaxjack.queens.styleguide.R
 
 @Composable
@@ -11,6 +12,9 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
     return QueenGameParams(
         boardParams = BoardParams(
             board = board
+        ),
+        headerParams = QueenGameHeaderParams(
+            queensUsed = "${queens.size}/${board.size}"
         ),
         tiles = board.positions.associateWith { position ->
             val hasQueen = queens.contains(position)
@@ -23,8 +27,9 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
                     isAttacked -> Color.Gray.copy(alpha = 0.8f)
                     else -> Color.Transparent
                 },
-                icon = painterResource(R.drawable.queen)
+                icon = painterResource(R.drawable.ic_queen)
                     .takeIf { hasQueen },
+                iconTint = queenColor.tint,
             )
         }
     )

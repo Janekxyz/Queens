@@ -1,6 +1,7 @@
 package com.jaxjack.queens.features.queengame.configuration
 
 import androidx.lifecycle.ViewModel
+import com.jaxjack.queens.features.queengame.QueenColor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +19,11 @@ class GameConfigurationViewModel @Inject constructor() : ViewModel() {
         is GameConfigurationAction.ConfigMaximumBoardSizeForScreen -> handleMaximumBoardSize(action.boardSize)
         GameConfigurationAction.DecreaseButtonClick -> changeBoardSize(-1)
         GameConfigurationAction.IncreaseButtonClick -> changeBoardSize(+1)
+        is GameConfigurationAction.QueenColorClick -> handleQueenColorClick(action.queenColor)
+    }
+
+    private fun handleQueenColorClick(queenColor: QueenColor) {
+        _viewState.update { state -> state.copy(queenColor = queenColor) }
     }
 
     private fun changeBoardSize(change: Int) {
@@ -40,6 +46,7 @@ private const val MIN_BOARD_SIZE = 4
 data class GameConfigurationViewState(
     val boardSize: Int = MIN_BOARD_SIZE,
     val maximumBoardSize: Int = 8,
+    val queenColor: QueenColor = QueenColor.White,
 ) {
     val decreaseButtonEnabled: Boolean = boardSize > MIN_BOARD_SIZE
     val increaseButtonEnabled: Boolean = boardSize < maximumBoardSize
@@ -49,4 +56,5 @@ sealed interface GameConfigurationAction {
     data class ConfigMaximumBoardSizeForScreen(val boardSize: Int) : GameConfigurationAction
     data object DecreaseButtonClick : GameConfigurationAction
     data object IncreaseButtonClick : GameConfigurationAction
+    data class QueenColorClick(val queenColor: QueenColor) : GameConfigurationAction
 }

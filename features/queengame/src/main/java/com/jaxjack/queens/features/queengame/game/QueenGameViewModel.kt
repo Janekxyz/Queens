@@ -3,6 +3,7 @@ package com.jaxjack.queens.features.queengame.game
 import androidx.lifecycle.ViewModel
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
+import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.game.data.QueenAttackMap
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
 import dagger.assisted.Assisted
@@ -63,14 +64,16 @@ class QueenGameViewModel @AssistedInject constructor(
     private fun initialState(): QueenGameViewState = QueenGameViewState(
         board = Board.create(route.boardSize),
         queens = emptySet(),
-        queenAttackMap = QueenAttackMap.of(size = route.boardSize, queens = emptySet())
+        queenAttackMap = QueenAttackMap.of(size = route.boardSize, queens = emptySet()),
+        queenColor = route.queenColor
     )
 }
 
 data class QueenGameViewState(
     val board: Board,
     val queens: Set<BoardPosition>,
-    val queenAttackMap: QueenAttackMap
+    val queenAttackMap: QueenAttackMap,
+    val queenColor: QueenColor
 )
 
 sealed interface QueenGameAction {

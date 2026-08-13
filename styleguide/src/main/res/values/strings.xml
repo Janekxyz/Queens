@@ -2,4 +2,7 @@
 <resources>
     <string name="game_configuration_play_button">Play</string>
     <string name="game_configuration_board_size">Board size</string>
+    <string name="game_configuration_queen_color">Queen color</string>
+    <string name="game_configuration_queen_color_white">White queen</string>
+    <string name="game_configuration_queen_color_black">Black queen</string>
 </resources>
