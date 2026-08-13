@@ -4,19 +4,18 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
@@ -24,7 +23,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -35,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.styleguide.R
 import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
+import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
 import kotlin.math.floor
 
 
@@ -95,13 +96,24 @@ private fun QueenGameContent(
     onPlayClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.statusBars))
+        modifier = modifier
+            .windowInsetsPadding(
+                WindowInsets.navigationBars.union(WindowInsets.statusBars)
+            )
+            .padding(horizontal = 16.dp)
     ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(R.string.game_configuration_app_name),
+            style = MaterialTheme.typography.displayLarge
+        )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
+
         ConfigureBoardContent(
             boardSizeText = params.boardSizeText,
+            boardDimensionsText = params.boardDimensionsText,
             decreaseButtonContainerColor = params.decreaseButtonContainerColor,
             decreaseButtonEnabled = params.decreaseButtonEnabled,
             increaseButtonContainerColor = params.increaseButtonContainerColor,
@@ -109,25 +121,21 @@ private fun QueenGameContent(
             onDecreaseBoardSizeButtonClick = onDecreaseBoardSizeButtonClick,
             onIncreaseBoardSizeButtonClick = onIncreaseBoardSizeButtonClick
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         QueenColorContent(
             options = params.queenColorOptions,
             onQueenColorClick = onQueenColorClick
         )
-        Spacer(modifier = Modifier.height(16.dp))
 
         Spacer(modifier = Modifier.weight(1f))
+
         Button(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                disabledContainerColor = MaterialTheme.colorScheme.tertiary,
-                disabledContentColor = MaterialTheme.colorScheme.onTertiary
+            colors = ButtonDefaults.buttonColors(
+                containerColor = boardTileGreen,
+                contentColor = boardTileWhite
             ),
             onClick = onPlayClick,
             content = {
@@ -137,12 +145,14 @@ private fun QueenGameContent(
                 )
             }
         )
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
 @Composable
 private fun ConfigureBoardContent(
     boardSizeText: String,
+    boardDimensionsText: String,
     decreaseButtonContainerColor: Color,
     decreaseButtonEnabled: Boolean,
     increaseButtonContainerColor: Color,
@@ -150,43 +160,57 @@ private fun ConfigureBoardContent(
     onDecreaseBoardSizeButtonClick: () -> Unit,
     onIncreaseBoardSizeButtonClick: () -> Unit,
 ) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = stringResource(R.string.game_configuration_board_size),
-        style = MaterialTheme.typography.headlineLarge.copy(
-            textAlign = TextAlign.Center
-        )
-    )
-    Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BoardSizeChangeButton(
-            icon = painterResource(R.drawable.ic_minus),
-            enabled = decreaseButtonEnabled,
-            containerColor = decreaseButtonContainerColor,
-            onClick = onDecreaseBoardSizeButtonClick
-        )
-
-        Spacer(modifier = Modifier.width(32.dp))
-
-        Text(
-            text = boardSizeText,
-            style = MaterialTheme.typography.headlineLarge.copy(
-                textAlign = TextAlign.Center
+        Column {
+            Text(
+                text = stringResource(R.string.game_configuration_board_size),
+                style = MaterialTheme.typography.headlineSmall
             )
-        )
+            Text(
+                text = boardDimensionsText,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.width(32.dp))
+        Row(
+            modifier = Modifier
+                .background(
+                    color = Color.LightGray,
+                    shape = CircleShape
+                )
+                .padding(4.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BoardSizeChangeButton(
+                icon = painterResource(R.drawable.ic_minus),
+                enabled = decreaseButtonEnabled,
+                containerColor = decreaseButtonContainerColor,
+                onClick = onDecreaseBoardSizeButtonClick
+            )
 
-        BoardSizeChangeButton(
-            icon = painterResource(R.drawable.ic_add),
-            containerColor = increaseButtonContainerColor,
-            enabled = increaseButtonEnabled,
-            onClick = onIncreaseBoardSizeButtonClick
-        )
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Text(
+                text = boardSizeText,
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    textAlign = TextAlign.Center
+                )
+            )
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            BoardSizeChangeButton(
+                icon = painterResource(R.drawable.ic_add),
+                containerColor = increaseButtonContainerColor,
+                enabled = increaseButtonEnabled,
+                onClick = onIncreaseBoardSizeButtonClick
+            )
+        }
     }
 }
 
@@ -195,24 +219,26 @@ private fun QueenColorContent(
     options: List<QueenColorOptionParams>,
     onQueenColorClick: (QueenColor) -> Unit,
 ) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = stringResource(R.string.game_configuration_queen_color),
-        style = MaterialTheme.typography.headlineLarge.copy(
-            textAlign = TextAlign.Center
-        )
-    )
-    Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(32.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        options.forEach { option ->
-            QueenColorOption(
-                params = option,
-                onClick = { onQueenColorClick(option.queenColor) }
-            )
+        Text(
+            text = stringResource(R.string.game_configuration_queen_color),
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            options.forEach { option ->
+                QueenColorOption(
+                    params = option,
+                    onClick = { onQueenColorClick(option.queenColor) }
+                )
+            }
         }
     }
 }
@@ -226,7 +252,7 @@ private fun QueenColorOption(
     val shape = RoundedCornerShape(8.dp)
     Box(
         modifier = Modifier
-            .size(72.dp)
+            .size(56.dp)
             .clip(shape)
             .background(color = params.backgroundColor)
             .border(width = 4.dp, color = borderColor, shape = shape)
@@ -251,6 +277,7 @@ fun BoardSizeChangeButton(
 ) {
     val containerColor by animateColorAsState(containerColor)
     IconButton(
+        modifier = Modifier.size(48.dp),
         shape = CircleShape,
         colors = IconButtonDefaults.iconButtonColors(
             containerColor = containerColor,
@@ -269,6 +296,7 @@ fun BoardSizeChangeButton(
 
 data class GameConfigurationParams(
     val boardSizeText: String,
+    val boardDimensionsText: String,
     val decreaseButtonContainerColor: Color,
     val decreaseButtonEnabled: Boolean,
     val increaseButtonContainerColor: Color,

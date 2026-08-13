@@ -14,16 +14,17 @@ import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
 fun GameConfigurationViewState.toParams(): GameConfigurationParams {
     return GameConfigurationParams(
         boardSizeText = boardSize.toString(),
+        boardDimensionsText = stringResource(R.string.game_configuration_board_dimensions, boardSize),
         decreaseButtonContainerColor = if (decreaseButtonEnabled) {
-            MaterialTheme.colorScheme.primary
+            boardTileGreen
         } else {
-            MaterialTheme.colorScheme.tertiary
+            boardTileWhite
         },
         decreaseButtonEnabled = decreaseButtonEnabled,
         increaseButtonContainerColor = if (increaseButtonEnabled) {
-            MaterialTheme.colorScheme.primary
+            boardTileGreen
         } else {
-            MaterialTheme.colorScheme.tertiary
+            boardTileWhite
         },
         increaseButtonEnabled = increaseButtonEnabled,
         queenColorOptions = QueenColor.entries.map { color ->

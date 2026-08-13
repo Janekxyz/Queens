@@ -6,6 +6,8 @@ import androidx.compose.ui.res.painterResource
 import com.jaxjack.queens.board.ui.BoardParams
 import com.jaxjack.queens.features.queengame.tint
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.base.boardAttackedDot
+import com.jaxjack.queens.styleguide.theme.base.boardQueenConflict
 
 @Composable
 internal fun QueenGameViewState.toParams(): QueenGameParams {
@@ -21,12 +23,12 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
             val isAttacked = queenAttackMap.isAttacked(position.x, position.y)
             val isConflicted = queenAttackMap.isConflicted(position.x, position.y)
             QueenGameTileParams(
-                // TODO move colors to the styleguide
-                backgroundColor = when {
-                    isConflicted -> Color.Red.copy(alpha = 0.5f)
-                    isAttacked -> Color.Gray.copy(alpha = 0.8f)
-                    else -> Color.Transparent
+                backgroundColor = if (hasQueen && isConflicted) {
+                    boardQueenConflict
+                } else {
+                    Color.Transparent
                 },
+                attackedDotColor = boardAttackedDot.takeIf { isAttacked && !hasQueen },
                 icon = painterResource(R.drawable.ic_queen)
                     .takeIf { hasQueen },
                 iconTint = queenColor.tint,
