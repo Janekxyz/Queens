@@ -13,4 +13,5 @@ val queenWhite = Color(0xFFD5D5D5)
 val queenBlack = Color(0xFF5C5957)
 
 val boardAttackedDot = Color(0x66000000)
+val boardAttackedOverlay = Color(0x40000000)
 val boardQueenConflict = Color(0x80D32F2F)

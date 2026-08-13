@@ -74,7 +74,10 @@ data class QueenGameViewState(
     val queens: Set<BoardPosition>,
     val queenAttackMap: QueenAttackMap,
     val queenColor: QueenColor
-)
+) {
+    val isSolved: Boolean = queens.size == board.size &&
+            queens.none { queenAttackMap.isConflicted(it.x, it.y) }
+}
 
 sealed interface QueenGameAction {
     data object RestartClick : QueenGameAction

@@ -5,6 +5,17 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextAlign
+import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
+import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.base.queenBlack
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
@@ -19,7 +30,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.remember
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +64,8 @@ import com.jaxjack.queens.styleguide.R
 internal fun QueenGameScreen(
     modifier: Modifier,
     viewModel: QueenGameViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNextGameClick: () -> Unit
 ) {
 
     val state by viewModel.viewState.collectAsStateWithLifecycle()
@@ -55,6 +75,7 @@ internal fun QueenGameScreen(
         modifier = modifier,
         params = params,
         onBackClick = onBackClick,
+        onNextGameClick = onNextGameClick,
         onRestartClick = { viewModel.onAction(QueenGameAction.RestartClick) },
         onTileClick = { viewModel.onAction(QueenGameAction.TileClick(it)) }
     )
@@ -66,64 +87,173 @@ private fun QueenGameContent(
     modifier: Modifier,
     params: QueenGameParams,
     onBackClick: () -> Unit,
+    onNextGameClick: () -> Unit,
     onRestartClick: () -> Unit,
     onTileClick: (BoardPosition) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxSize()) {
-        TopAppBar(
-            windowInsets = WindowInsets.statusBars,
-            navigationIcon = {
-                IconButton(onClick = onBackClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_back),
-                        // TODO implement content description
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryFixed
-                    )
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopAppBar(
+                windowInsets = WindowInsets.statusBars,
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_back),
+                            // TODO implement content description
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryFixed
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = onRestartClick) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_restart),
+                            // TODO implement content description
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryFixed
+                        )
+                    }
+                },
+                title = {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(36.dp),
+                            painter = painterResource(R.drawable.ic_queen),
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = params.headerParams.queensUsed,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
                 }
-            },
-            actions = {
-                IconButton(onClick = onRestartClick) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_restart),
-                        // TODO implement content description
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryFixed
-                    )
-                }
-            },
-            title = {
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier.size(36.dp),
-                        painter = painterResource(R.drawable.ic_queen),
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = params.headerParams.queensUsed,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
-            }
-        )
+            )
 
-        BoardContent(
-            params = params.boardParams,
-            cell = { position ->
-                params.tiles[position]?.let { params ->
-                    QueenGameTileContent(
-                        params = params,
-                        onTileClick = { onTileClick(position) }
+            BoardContent(
+                params = params.boardParams,
+                cell = { position ->
+                    params.tiles[position]?.let { params ->
+                        QueenGameTileContent(
+                            params = params,
+                            onTileClick = { onTileClick(position) }
+                        )
+                    }
+                }
+            )
+        }
+
+        params.successParams?.let { successParams ->
+            QueenGameSuccessOverlay(
+                params = successParams,
+                onRestartClick = onRestartClick,
+                onNextGameClick = onNextGameClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun QueenGameSuccessOverlay(
+    params: QueenGameSuccessParams,
+    onRestartClick: () -> Unit,
+    onNextGameClick: () -> Unit
+) {
+    var shown by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { shown = true }
+    val scrimAlpha by animateFloatAsState(if (shown) 0.6f else 0f, tween(220))
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.scrim.copy(alpha = scrimAlpha))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {}
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedVisibility(
+            visible = shown,
+            enter = fadeIn(tween(220)) + scaleIn(tween(220), initialScale = 0.85f)
+        ) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                shape = RoundedCornerShape(28.dp),
+                color = boardTileWhite
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(88.dp)
+                            .clip(CircleShape)
+                            .background(color = boardTileGreen),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            modifier = Modifier.fillMaxSize(0.55f),
+                            painter = painterResource(R.drawable.ic_queen),
+                            contentDescription = null,
+                            tint = params.queenTint
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Text(
+                        text = params.title,
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = queenBlack
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = params.message,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            textAlign = TextAlign.Center
+                        ),
+                        color = queenBlack
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = boardTileGreen,
+                            contentColor = boardTileWhite
+                        ),
+                        onClick = onNextGameClick
+                    ) {
+                        Text(
+                            text = params.nextGameButtonText,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    TextButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.textButtonColors(contentColor = boardTileGreen),
+                        onClick = onRestartClick
+                    ) {
+                        Text(
+                            text = params.restartButtonText,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                    }
                 }
             }
-        )
+        }
     }
 }
 
@@ -175,7 +305,17 @@ private fun BoxScope.QueenGameTileContent(
 data class QueenGameParams(
     val headerParams: QueenGameHeaderParams,
     val boardParams: BoardParams,
-    val tiles: Map<BoardPosition, QueenGameTileParams>
+    val tiles: Map<BoardPosition, QueenGameTileParams>,
+    val successParams: QueenGameSuccessParams?
+)
+
+@Immutable
+data class QueenGameSuccessParams(
+    val title: String,
+    val message: String,
+    val queenTint: Color,
+    val restartButtonText: String,
+    val nextGameButtonText: String
 )
 
 @Immutable

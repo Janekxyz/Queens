@@ -8,7 +8,8 @@ import com.jaxjack.queens.features.queengame.game.QueenGameScreen
 import com.jaxjack.queens.features.queengame.game.QueenGameViewModel
 
 fun EntryProviderScope<NavKey>.queenGameEntry(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNextGameClick: () -> Unit
 ) {
     entry<QueenGameKey> { key ->
         val viewModel = hiltViewModel<QueenGameViewModel, QueenGameViewModel.Factory>(
@@ -19,7 +20,8 @@ fun EntryProviderScope<NavKey>.queenGameEntry(
         QueenGameScreen(
             modifier = Modifier,
             viewModel = viewModel,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onNextGameClick = onNextGameClick
         )
     }
 }

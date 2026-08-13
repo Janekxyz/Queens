@@ -31,7 +31,8 @@ fun QueensNavDisplay(modifier: Modifier = Modifier) {
                 },
             )
             queenGameEntry(
-                onBackClick = { backStack.removeLastOrNull() }
+                onBackClick = { backStack.removeLastOrNull() },
+                onNextGameClick = { backStack.removeLastOrNull() }
             )
         },
     )
