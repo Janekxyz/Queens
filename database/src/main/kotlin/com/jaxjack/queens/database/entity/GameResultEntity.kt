@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity("game_result")
 data class GameResultEntity(
-    @PrimaryKey val id: String,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo("duration") val duration: Long,
     @ColumnInfo("board_size") val boardSize: Long,
     @ColumnInfo("created_at") val createdAt: Long

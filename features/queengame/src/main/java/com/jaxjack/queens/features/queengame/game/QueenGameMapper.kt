@@ -49,3 +49,7 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
         }
     )
 }
+
+internal fun Long.toTimerParams() = QueenGameTimerParams(
+    time = "%d:%02d".format(this / 60_000, (this / 1_000) % 60)
+)

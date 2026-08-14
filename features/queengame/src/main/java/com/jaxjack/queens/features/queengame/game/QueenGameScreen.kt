@@ -2,23 +2,14 @@ package com.jaxjack.queens.features.queengame.game
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.style.TextAlign
-import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
-import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
-import com.jaxjack.queens.styleguide.theme.base.queenBlack
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -26,39 +17,47 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
-import androidx.compose.runtime.remember
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jaxjack.queens.board.BoardPosition
 import com.jaxjack.queens.board.ui.BoardContent
 import com.jaxjack.queens.board.ui.BoardParams
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
+import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.base.queenBlack
 
 @Composable
 internal fun QueenGameScreen(
@@ -67,13 +66,14 @@ internal fun QueenGameScreen(
     onBackClick: () -> Unit,
     onNextGameClick: () -> Unit
 ) {
-
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val elapsed = viewModel.elapsedMilliseconds.collectAsStateWithLifecycle()
     val params = state.toParams()
 
     QueenGameContent(
         modifier = modifier,
         params = params,
+        timerParams = { elapsed.value.toTimerParams() },
         onBackClick = onBackClick,
         onNextGameClick = onNextGameClick,
         onRestartClick = { viewModel.onAction(QueenGameAction.RestartClick) },
@@ -86,10 +86,11 @@ internal fun QueenGameScreen(
 private fun QueenGameContent(
     modifier: Modifier,
     params: QueenGameParams,
+    timerParams: () -> QueenGameTimerParams,
     onBackClick: () -> Unit,
     onNextGameClick: () -> Unit,
     onRestartClick: () -> Unit,
-    onTileClick: (BoardPosition) -> Unit
+    onTileClick: (BoardPosition) -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -146,6 +147,23 @@ private fun QueenGameContent(
                         )
                     }
                 }
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = "Duration",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    textAlign = TextAlign.Center
+                )
+            )
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = timerParams().time,
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    textAlign = TextAlign.Center
+                )
             )
         }
 
@@ -321,6 +339,11 @@ data class QueenGameSuccessParams(
 @Immutable
 data class QueenGameHeaderParams(
     val queensUsed: String
+)
+
+@Immutable
+data class QueenGameTimerParams(
+    val time: String
 )
 
 @Immutable

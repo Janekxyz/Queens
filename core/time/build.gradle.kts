@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jaxjack.queens.features.gameresult.impl"
+    namespace = "com.jaxjack.queens.core.time"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -25,10 +25,6 @@ android {
 }
 
 dependencies {
-    api(project(":features:gameresult:api"))
-    implementation(project(":database"))
-    implementation(project(":core:time"))
-    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     testImplementation(libs.junit)

@@ -41,10 +41,13 @@ android {
 dependencies {
     implementation(project(":styleguide"))
     implementation(project(":features:queengame"))
+    implementation(project(":features:gameresult:api"))
+    implementation(project(":features:gameresult:impl"))
     implementation(project(":features:leaderboard:api"))
     implementation(project(":features:leaderboard:impl"))
     implementation(project(":board"))
     implementation(project(":database"))
+    implementation(project(":core:time"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
