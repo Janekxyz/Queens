@@ -56,6 +56,7 @@ import kotlin.math.floor
 internal fun GameConfigurationScreen(
     modifier: Modifier,
     onPlayClick: (Int, QueenColor) -> Unit,
+    onLeaderboardClick: () -> Unit
 ) {
     val viewModel: GameConfigurationViewModel = hiltViewModel()
 
@@ -82,7 +83,8 @@ internal fun GameConfigurationScreen(
         onDecreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.DecreaseButtonClick) },
         onIncreaseBoardSizeButtonClick = { viewModel.onAction(GameConfigurationAction.IncreaseButtonClick) },
         onQueenColorClick = { viewModel.onAction(GameConfigurationAction.QueenColorClick(it)) },
-        onPlayClick = { onPlayClick(state.boardSize, state.queenColor) }
+        onPlayClick = { onPlayClick(state.boardSize, state.queenColor) },
+        onLeaderboardClick = { onLeaderboardClick() }
     )
 }
 
@@ -94,6 +96,7 @@ private fun QueenGameContent(
     onIncreaseBoardSizeButtonClick: () -> Unit,
     onQueenColorClick: (QueenColor) -> Unit,
     onPlayClick: () -> Unit,
+    onLeaderboardClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -103,11 +106,24 @@ private fun QueenGameContent(
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.game_configuration_app_name),
-            style = MaterialTheme.typography.displayLarge
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.game_configuration_app_name),
+                style = MaterialTheme.typography.displayLarge
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(
+                modifier = Modifier.background(Color.LightGray, CircleShape),
+                onClick = onLeaderboardClick
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(R.drawable.ic_leaderboard),
+                    // TODO add content description
+                    contentDescription = null,
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(64.dp))
 

@@ -27,4 +27,6 @@ include(":app")
 include(":styleguide")
 include(":board")
 include(":features:queengame")
+include(":features:leaderboard:api")
+include(":features:leaderboard:impl")
  

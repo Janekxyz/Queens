@@ -8,11 +8,13 @@ import com.jaxjack.queens.features.queengame.configuration.GameConfigurationScre
 
 fun EntryProviderScope<NavKey>.gameConfigurationEntry(
     onPlayClick: (Int, QueenColor) -> Unit,
+    onLeaderboardClick: () -> Unit
 ) {
     entry<GameConfigurationKey> {
         GameConfigurationScreen(
             modifier = Modifier,
             onPlayClick = onPlayClick,
+            onLeaderboardClick = onLeaderboardClick
         )
     }
 }

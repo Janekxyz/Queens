@@ -7,6 +7,8 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.jaxjack.queens.features.leaderboard.api.navigation.LeaderboardKey
+import com.jaxjack.queens.features.leaderboard.impl.navigation.leaderboardEntry
 import com.jaxjack.queens.features.queengame.configuration.navigation.GameConfigurationKey
 import com.jaxjack.queens.features.queengame.configuration.navigation.gameConfigurationEntry
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
@@ -29,10 +31,16 @@ fun QueensNavDisplay(modifier: Modifier = Modifier) {
                 onPlayClick = { boardSize, queenColor ->
                     backStack.add(QueenGameKey(boardSize = boardSize, queenColor = queenColor))
                 },
+                onLeaderboardClick = {
+                    backStack.add(LeaderboardKey)
+                }
             )
             queenGameEntry(
                 onBackClick = { backStack.removeLastOrNull() },
                 onNextGameClick = { backStack.removeLastOrNull() }
+            )
+            leaderboardEntry(
+                onBackClick = { backStack.removeLastOrNull() }
             )
         },
     )

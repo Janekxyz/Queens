@@ -5,6 +5,8 @@
     <string name="game_configuration_board_size">Board size</string>
     <string name="game_configuration_board_dimensions">%1$d x %1$d</string>
     <string name="game_configuration_queen_color">Queen color</string>
+    <string name="leaderboard_title">Leaderboard</string>
+    <string name="leaderboard_empty">No results yet</string>
     <string name="queen_game_success_title">Solved!</string>
     <string name="queen_game_success_message">You placed all %1$d queens without a single conflict.</string>
     <string name="queen_game_success_restart">Restart</string>

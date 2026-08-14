@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(project(":styleguide"))
     implementation(project(":features:queengame"))
+    implementation(project(":features:leaderboard:api"))
+    implementation(project(":features:leaderboard:impl"))
     implementation(project(":board"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
