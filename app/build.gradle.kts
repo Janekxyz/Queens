@@ -44,6 +44,7 @@ dependencies {
     implementation(project(":features:leaderboard:api"))
     implementation(project(":features:leaderboard:impl"))
     implementation(project(":board"))
+    implementation(project(":database"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

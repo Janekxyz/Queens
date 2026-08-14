@@ -26,7 +26,10 @@ rootProject.name = "Queens"
 include(":app")
 include(":styleguide")
 include(":board")
+include(":database")
 include(":features:queengame")
 include(":features:leaderboard:api")
 include(":features:leaderboard:impl")
+include(":features:gameresult:api")
+include(":features:gameresult:impl")
  
