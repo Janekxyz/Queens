@@ -7,6 +7,7 @@ import androidx.compose.ui.res.stringResource
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.tint
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.base.boardAttackedDot
 import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
 import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
 
@@ -36,7 +37,7 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
                     QueenColor.Black -> boardTileWhite
                 },
                 borderColor = if (color == queenColor) {
-                    MaterialTheme.colorScheme.primary
+                    boardAttackedDot
                 } else {
                     Color.Transparent
                 },

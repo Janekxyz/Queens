@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Constraints
@@ -23,7 +24,7 @@ fun BoardContent(
     Layout(
         content = {
             params.board.positions.forEach { position ->
-                BoardCell(position = position) {
+                BoardCell(position = position, params = params) {
                     cell(position)
                 }
             }
@@ -50,14 +51,17 @@ fun BoardContent(
 @Composable
 private fun BoardCell(
     position: BoardPosition,
+    params: BoardParams,
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
         modifier = Modifier
             .testTag(boardCellTestTag(position))
             .drawBehind {
-                // TODO color should be moved to the proper class
-                drawRect(if ((position.x + position.y) % 2 == 0) boardTileWhite else boardTileGreen)
+                drawRect(
+                    if ((position.x + position.y) % 2 == 0) params.lightTileColor
+                    else params.darkTileColor
+                )
             },
         contentAlignment = Alignment.Center,
         content = content
@@ -65,7 +69,9 @@ private fun BoardCell(
 }
 
 data class BoardParams(
-    val board: Board
+    val board: Board,
+    val lightTileColor: Color = boardTileWhite,
+    val darkTileColor: Color = boardTileGreen,
 )
 
 fun boardCellTestTag(position: BoardPosition): String =

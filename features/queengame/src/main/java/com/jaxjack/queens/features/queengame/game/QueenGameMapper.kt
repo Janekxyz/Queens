@@ -37,9 +37,19 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
             val isAttacked = queenAttackMap.isAttacked(position.x, position.y)
             val isConflicted = queenAttackMap.isConflicted(position.x, position.y)
             QueenGameTileParams(
+                contentDescription = stringResource(
+                    when {
+                        hasQueen && isConflicted -> R.string.content_description_tile_conflicted
+                        hasQueen -> R.string.content_description_tile_queen
+                        isAttacked -> R.string.content_description_tile_attacked
+                        else -> R.string.content_description_tile_free
+                    },
+                    position.y + 1,
+                    position.x + 1
+                ),
                 backgroundColor = when {
                     hasQueen && isConflicted -> boardQueenConflict
-                    isAttacked && !hasQueen -> boardAttackedOverlay
+                    isAttacked -> boardAttackedOverlay
                     else -> Color.Transparent
                 },
                 attackedDotColor = boardAttackedDot.takeIf { isAttacked && !hasQueen },

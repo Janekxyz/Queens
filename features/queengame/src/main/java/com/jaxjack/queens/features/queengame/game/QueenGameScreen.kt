@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -290,7 +292,8 @@ private fun BoxScope.QueenGameTileContent(
         modifier = Modifier
             .matchParentSize()
             .background(color = backgroundColor)
-            .clickable(onClick = onTileClick),
+            .clickable(onClick = onTileClick)
+            .semantics { contentDescription = params.contentDescription },
         contentAlignment = Alignment.Center
     ) {
         AnimatedVisibility(
@@ -354,6 +357,7 @@ data class QueenGameTimerParams(
 
 @Immutable
 data class QueenGameTileParams(
+    val contentDescription: String,
     val icon: Painter?,
     val iconTint: Color,
     val backgroundColor: Color,

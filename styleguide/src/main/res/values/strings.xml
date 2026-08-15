@@ -18,6 +18,10 @@
     <string name="content_description_back">Back</string>
     <string name="content_description_leaderboard">Leaderboard</string>
     <string name="content_description_restart">Restart game</string>
+    <string name="content_description_tile_free">Row %1$d, column %2$d, free</string>
+    <string name="content_description_tile_attacked">Row %1$d, column %2$d, attacked</string>
+    <string name="content_description_tile_queen">Row %1$d, column %2$d, queen</string>
+    <string name="content_description_tile_conflicted">Row %1$d, column %2$d, queen in conflict</string>
     <string name="content_description_decrease_board_size">Decrease board size</string>
     <string name="content_description_increase_board_size">Increase board size</string>
 </resources>
