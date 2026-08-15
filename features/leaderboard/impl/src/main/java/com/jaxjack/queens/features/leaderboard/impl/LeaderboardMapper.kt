@@ -1,6 +1,6 @@
 package com.jaxjack.queens.features.leaderboard.impl
 
-import com.jaxjack.queens.features.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResult
 
 internal fun LeaderboardViewState.toParams(): LeaderboardParams {
     return LeaderboardParams(

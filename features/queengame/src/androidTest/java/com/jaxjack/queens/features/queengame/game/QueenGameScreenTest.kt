@@ -13,9 +13,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.jaxjack.queens.board.BoardPosition
 import com.jaxjack.queens.board.ui.boardCellTestTag
 import com.jaxjack.queens.core.time.TimeProvider
-import com.jaxjack.queens.features.gameresult.api.GameResult
-import com.jaxjack.queens.features.gameresult.api.GameResultDraft
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResultDraft
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
 import com.jaxjack.queens.styleguide.R

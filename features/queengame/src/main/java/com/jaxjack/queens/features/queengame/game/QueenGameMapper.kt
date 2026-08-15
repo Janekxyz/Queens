@@ -18,10 +18,7 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
             board = board
         ),
         headerParams = QueenGameHeaderParams(
-            queensLeft = stringResource(
-                R.string.queen_game_queens_left,
-                (board.size - queens.size).coerceAtLeast(0)
-            )
+            queensLeft = stringResource(R.string.queen_game_queens_left, board.size - queens.size)
         ),
         successParams = if (isSolved) {
             QueenGameSuccessParams(

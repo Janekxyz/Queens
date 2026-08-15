@@ -3,9 +3,9 @@ package com.jaxjack.queens.features.leaderboard.impl
 import app.cash.turbine.test
 import com.jaxjack.queens.core.testing.FakeGameResultRepository
 import com.jaxjack.queens.core.testing.TestCoroutineExtension
-import com.jaxjack.queens.features.gameresult.api.GameResult
-import com.jaxjack.queens.features.gameresult.api.GameResultDraft
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResultDraft
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest

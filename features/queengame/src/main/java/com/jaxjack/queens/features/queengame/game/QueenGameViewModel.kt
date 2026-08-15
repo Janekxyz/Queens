@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
 import com.jaxjack.queens.core.time.TimeProvider
-import com.jaxjack.queens.features.gameresult.api.GameResultDraft
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResultDraft
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.game.data.QueenAttackMap
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
@@ -68,6 +68,8 @@ class QueenGameViewModel @AssistedInject constructor(
             updatePositions { remove(position) }
             return
         }
+
+        if (currentState.queens.size >= currentState.board.size) return
 
         updatePositions { add(position) }
     }

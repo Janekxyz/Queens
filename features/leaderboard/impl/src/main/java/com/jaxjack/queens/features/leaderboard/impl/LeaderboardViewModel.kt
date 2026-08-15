@@ -2,8 +2,8 @@ package com.jaxjack.queens.features.leaderboard.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jaxjack.queens.features.gameresult.api.GameResult
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch

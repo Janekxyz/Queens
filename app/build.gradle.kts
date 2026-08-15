@@ -41,8 +41,8 @@ android {
 dependencies {
     implementation(project(":styleguide"))
     implementation(project(":features:queengame"))
-    implementation(project(":features:gameresult:api"))
-    implementation(project(":features:gameresult:impl"))
+    implementation(project(":gameresult:api"))
+    implementation(project(":gameresult:impl"))
     implementation(project(":features:leaderboard:api"))
     implementation(project(":features:leaderboard:impl"))
     implementation(project(":board"))

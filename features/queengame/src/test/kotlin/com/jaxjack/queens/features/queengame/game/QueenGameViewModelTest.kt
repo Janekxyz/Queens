@@ -163,6 +163,35 @@ class QueenGameViewModelTest {
     }
 
     @Test
+    fun `placing more queens than the board holds is ignored`() = runTest {
+        val viewModel = createViewModel()
+        solve(viewModel)
+
+        viewModel.onAction(QueenGameAction.TileClick(BoardPosition(x = 0, y = 0)))
+
+        viewModel.viewState.test {
+            assertEquals(4, awaitItem().queens.size)
+        }
+    }
+
+    @Test
+    fun `removing a queen frees a slot for another one`() = runTest {
+        val viewModel = createViewModel()
+        solve(viewModel)
+        val placed = BoardPosition(x = 1, y = 0)
+        val free = BoardPosition(x = 0, y = 0)
+
+        viewModel.onAction(QueenGameAction.TileClick(placed))
+        viewModel.onAction(QueenGameAction.TileClick(free))
+
+        viewModel.viewState.test {
+            val queens = awaitItem().queens
+            assertEquals(4, queens.size)
+            assertTrue(queens.contains(free))
+        }
+    }
+
+    @Test
     fun `restart clears the board`() = runTest {
         val viewModel = createViewModel()
         solve(viewModel)

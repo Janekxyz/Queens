@@ -40,7 +40,7 @@ android {
 
 dependencies {
     api(project(":features:leaderboard:api"))
-    api(project(":features:gameresult:api"))
+    api(project(":gameresult:api"))
     implementation(project(":styleguide"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

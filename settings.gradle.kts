@@ -32,6 +32,6 @@ include(":core:testing")
 include(":features:queengame")
 include(":features:leaderboard:api")
 include(":features:leaderboard:impl")
-include(":features:gameresult:api")
-include(":features:gameresult:impl")
+include(":gameresult:api")
+include(":gameresult:impl")
  

@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":styleguide"))
     implementation(project(":board"))
     implementation(project(":core:time"))
-    implementation(project(":features:gameresult:api"))
+    implementation(project(":gameresult:api"))
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)

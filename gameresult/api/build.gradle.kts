@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jaxjack.queens.core.testing"
+    namespace = "com.jaxjack.queens.gameresult.api"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,6 +12,8 @@ android {
 
     defaultConfig {
         minSdk = 31
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     packaging {
@@ -27,10 +29,7 @@ android {
 }
 
 dependencies {
-    api(platform(libs.junit5.bom))
-    api(libs.junit5.jupiter)
-    api(libs.turbine)
-    api(libs.kotlinx.coroutines.test)
-    api(project(":core:time"))
-    api(project(":gameresult:api"))
+    api(libs.kotlinx.coroutines.core)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 }

@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -100,8 +101,7 @@ private fun QueenGameContent(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             painter = painterResource(R.drawable.ic_back),
-                            // TODO implement content description
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_back),
                             tint = MaterialTheme.colorScheme.onPrimaryFixed
                         )
                     }
@@ -110,8 +110,7 @@ private fun QueenGameContent(
                     IconButton(onClick = onRestartClick) {
                         Icon(
                             painter = painterResource(R.drawable.ic_restart),
-                            // TODO implement content description
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.content_description_restart),
                             tint = MaterialTheme.colorScheme.onPrimaryFixed
                         )
                     }

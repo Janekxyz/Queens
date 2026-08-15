@@ -11,9 +11,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.jaxjack.queens.features.gameresult.api.GameResult
-import com.jaxjack.queens.features.gameresult.api.GameResultDraft
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResultDraft
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import com.jaxjack.queens.styleguide.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

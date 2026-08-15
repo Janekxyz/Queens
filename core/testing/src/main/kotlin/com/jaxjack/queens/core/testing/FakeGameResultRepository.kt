@@ -1,8 +1,8 @@
 package com.jaxjack.queens.core.testing
 
-import com.jaxjack.queens.features.gameresult.api.GameResult
-import com.jaxjack.queens.features.gameresult.api.GameResultDraft
-import com.jaxjack.queens.features.gameresult.api.GameResultRepository
+import com.jaxjack.queens.gameresult.api.GameResult
+import com.jaxjack.queens.gameresult.api.GameResultDraft
+import com.jaxjack.queens.gameresult.api.GameResultRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
