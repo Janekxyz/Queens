@@ -1,15 +1,16 @@
 package com.jaxjack.queens.features.queengame.configuration
 
 import app.cash.turbine.test
+import com.jaxjack.queens.core.testing.TestCoroutineExtension
 import com.jaxjack.queens.features.queengame.QueenColor
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExtendWith(TestCoroutineExtension::class)
 class GameConfigurationViewModelTest {
 
     @Test
@@ -94,7 +95,7 @@ class GameConfigurationViewModelTest {
     @Test
     fun `increase button is disabled only at the maximum`() = runTest {
         val viewModel = createViewModel()
- 
+
         viewModel.viewState.test {
             assertTrue(awaitItem().increaseButtonEnabled)
 
