@@ -130,7 +130,7 @@ private fun QueenGameContent(
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = params.headerParams.queensUsed,
+                            text = params.headerParams.queensLeft,
                             style = MaterialTheme.typography.titleLarge,
                         )
                     }
@@ -338,7 +338,7 @@ data class QueenGameSuccessParams(
 
 @Immutable
 data class QueenGameHeaderParams(
-    val queensUsed: String
+    val queensLeft: String
 )
 
 @Immutable
