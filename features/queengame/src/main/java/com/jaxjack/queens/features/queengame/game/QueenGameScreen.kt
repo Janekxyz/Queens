@@ -21,7 +21,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -96,9 +99,17 @@ private fun QueenGameContent(
     onTileClick: (BoardPosition) -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom
+                    )
+                )
+        ) {
             TopAppBar(
-                windowInsets = WindowInsets.statusBars,
+                windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Top),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -138,17 +149,24 @@ private fun QueenGameContent(
                 }
             )
 
-            BoardContent(
-                params = params.boardParams,
-                cell = { position ->
-                    params.tiles[position]?.let { params ->
-                        QueenGameTileContent(
-                            params = params,
-                            onTileClick = { onTileClick(position) }
-                        )
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                BoardContent(
+                    params = params.boardParams,
+                    cell = { position ->
+                        params.tiles[position]?.let { params ->
+                            QueenGameTileContent(
+                                params = params,
+                                onTileClick = { onTileClick(position) }
+                            )
+                        }
                     }
-                }
-            )
+                )
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
