@@ -116,7 +116,7 @@ private class FailingGameResultRepository(
 
     override suspend fun insert(gameResultDraft: GameResultDraft) = Unit
 
-    override fun observeAll(): Flow<List<GameResult>> = flow { throw throwable }
+    override fun observeBestPerBoardSize(): Flow<List<GameResult>> = flow { throw throwable }
 }
 
 private val RESULT_FOUR = GameResult(id = 1, duration = 12_000, boardSize = 4)

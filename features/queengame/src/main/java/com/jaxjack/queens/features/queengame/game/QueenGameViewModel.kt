@@ -86,12 +86,13 @@ class QueenGameViewModel @AssistedInject constructor(
         }
 
         if (!wasSolved && state.isSolved) {
-            saveResult(boardSize = state.board.size)
+            val duration = timeProvider.elapsedRealtimeMillis() - startedAt
+            _viewState.update { it.copy(solvedDuration = duration) }
+            saveResult(duration = duration, boardSize = state.board.size)
         }
     }
 
-    private fun saveResult(boardSize: Int) {
-        val duration = timeProvider.elapsedRealtimeMillis() - startedAt
+    private fun saveResult(duration: Long, boardSize: Int) {
         viewModelScope.launch {
             val gameResult = GameResultDraft(
                 duration = duration,
@@ -113,7 +114,8 @@ data class QueenGameViewState(
     val board: Board,
     val queens: Set<BoardPosition>,
     val queenAttackMap: QueenAttackMap,
-    val queenColor: QueenColor
+    val queenColor: QueenColor,
+    val solvedDuration: Long = 0,
 ) {
     val isSolved: Boolean = queens.size == board.size &&
             queens.none { queenAttackMap.isConflicted(it.x, it.y) }

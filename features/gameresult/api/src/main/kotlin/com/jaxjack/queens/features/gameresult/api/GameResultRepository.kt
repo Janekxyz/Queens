@@ -6,5 +6,5 @@ interface GameResultRepository {
 
     suspend fun insert(draft: GameResultDraft)
 
-    fun observeAll(): Flow<List<GameResult>>
+    fun observeBestPerBoardSize(): Flow<List<GameResult>>
 }

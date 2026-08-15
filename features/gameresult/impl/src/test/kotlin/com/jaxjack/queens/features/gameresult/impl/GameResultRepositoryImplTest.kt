@@ -47,8 +47,8 @@ class GameResultRepositoryImplTest {
     }
 
     @Test
-    fun `observeAll maps entities to domain models`() = runTest {
-        repository.observeAll().test {
+    fun `observeBestPerBoardSize maps entities to domain models`() = runTest {
+        repository.observeBestPerBoardSize().test {
             dao.emit(listOf(GameResultEntity(id = 7, duration = 12_000, boardSize = 4, createdAt = 1_000)))
 
             assertEquals(
@@ -59,8 +59,8 @@ class GameResultRepositoryImplTest {
     }
 
     @Test
-    fun `observeAll keeps the order the dao emits`() = runTest {
-        repository.observeAll().test {
+    fun `observeBestPerBoardSize keeps the order the dao emits`() = runTest {
+        repository.observeBestPerBoardSize().test {
             dao.emit(
                 listOf(
                     GameResultEntity(id = 1, duration = 45_000, boardSize = 6, createdAt = 1_000),
@@ -87,5 +87,5 @@ private class FakeGameResultDao : GameResultDao {
         inserted += gameResultEntity
     }
 
-    override fun observeAll(): Flow<List<GameResultEntity>> = results
+    override fun observeBestPerBoardSize(): Flow<List<GameResultEntity>> = results
 }

@@ -27,6 +27,7 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
             QueenGameSuccessParams(
                 title = stringResource(R.string.queen_game_success_title),
                 message = stringResource(R.string.queen_game_success_message, board.size),
+                time = solvedDuration.toTimerParams().time,
                 queenTint = queenColor.tint,
                 restartButtonText = stringResource(R.string.queen_game_success_restart),
                 nextGameButtonText = stringResource(R.string.queen_game_success_next_game)

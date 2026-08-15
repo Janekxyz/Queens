@@ -20,5 +20,5 @@ class FakeGameResultRepository : GameResultRepository {
         inserted += gameResultDraft
     }
 
-    override fun observeAll(): Flow<List<GameResult>> = results
+    override fun observeBestPerBoardSize(): Flow<List<GameResult>> = results
 }

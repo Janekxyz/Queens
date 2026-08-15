@@ -234,6 +234,12 @@ private fun QueenGameSuccessOverlay(
                         style = MaterialTheme.typography.headlineLarge,
                         color = queenBlack
                     )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = params.time,
+                        style = MaterialTheme.typography.displaySmall,
+                        color = boardTileGreen
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = params.message,
@@ -331,6 +337,7 @@ data class QueenGameParams(
 data class QueenGameSuccessParams(
     val title: String,
     val message: String,
+    val time: String,
     val queenTint: Color,
     val restartButtonText: String,
     val nextGameButtonText: String

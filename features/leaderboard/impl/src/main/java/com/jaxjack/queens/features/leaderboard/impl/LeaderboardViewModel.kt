@@ -16,7 +16,7 @@ class LeaderboardViewModel @Inject constructor(
     gameResultRepository: GameResultRepository
 ) : ViewModel() {
 
-    val viewState = gameResultRepository.observeAll()
+    val viewState = gameResultRepository.observeBestPerBoardSize()
         .map { results -> LeaderboardViewState(isLoading = false, list = results) }
         .catch { throwable -> emit(LeaderboardViewState(isLoading = false, error = throwable)) }
         .stateIn(

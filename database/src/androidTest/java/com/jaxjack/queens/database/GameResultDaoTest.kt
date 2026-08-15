@@ -36,7 +36,7 @@ class GameResultDaoTest {
 
     @Test
     fun `empty database emits no results`() = runTest {
-        dao.observeAll().test {
+        dao.observeBestPerBoardSize().test {
             assertEquals(emptyList<GameResultEntity>(), awaitItem())
         }
     }
@@ -45,7 +45,7 @@ class GameResultDaoTest {
     fun `inserted result is returned with its columns`() = runTest {
         dao.insert(gameResult(duration = 12_000, boardSize = 4, createdAt = 1_700_000_000_000))
 
-        dao.observeAll().test {
+        dao.observeBestPerBoardSize().test {
             val stored = awaitItem().single()
             assertEquals(12_000, stored.duration)
             assertEquals(4, stored.boardSize)
@@ -57,7 +57,7 @@ class GameResultDaoTest {
     fun `insert assigns an identifier`() = runTest {
         dao.insert(gameResult(duration = 12_000, boardSize = 4))
 
-        dao.observeAll().test {
+        dao.observeBestPerBoardSize().test {
             assertTrue(awaitItem().single().id > 0)
         }
     }
@@ -65,9 +65,9 @@ class GameResultDaoTest {
     @Test
     fun `insert assigns unique identifiers`() = runTest {
         dao.insert(gameResult(duration = 12_000, boardSize = 4))
-        dao.insert(gameResult(duration = 12_000, boardSize = 4))
+        dao.insert(gameResult(duration = 12_000, boardSize = 6))
 
-        dao.observeAll().test {
+        dao.observeBestPerBoardSize().test {
             val stored = awaitItem()
             assertEquals(2, stored.size)
             assertNotEquals(stored[0].id, stored[1].id)
@@ -75,22 +75,60 @@ class GameResultDaoTest {
     }
 
     @Test
-    fun `results are ordered by shortest duration first`() = runTest {
+    fun `results are ordered by board size`() = runTest {
         dao.insert(gameResult(duration = 45_000, boardSize = 6))
         dao.insert(gameResult(duration = 12_000, boardSize = 4))
         dao.insert(gameResult(duration = 30_000, boardSize = 8))
 
-        dao.observeAll().test {
+        dao.observeBestPerBoardSize().test {
             assertEquals(
-                listOf(12_000L, 30_000L, 45_000L),
+                listOf(4L, 6L, 8L),
+                awaitItem().map(GameResultEntity::boardSize)
+            )
+        }
+    }
+
+    @Test
+    fun `only the fastest result of each board size is returned`() = runTest {
+        dao.insert(gameResult(duration = 45_000, boardSize = 4))
+        dao.insert(gameResult(duration = 12_000, boardSize = 4))
+        dao.insert(gameResult(duration = 30_000, boardSize = 4))
+        dao.insert(gameResult(duration = 60_000, boardSize = 6))
+
+        dao.observeBestPerBoardSize().test {
+            assertEquals(
+                listOf(12_000L, 60_000L),
                 awaitItem().map(GameResultEntity::duration)
             )
         }
     }
 
     @Test
-    fun `observeAll emits again when a result is inserted`() = runTest {
-        dao.observeAll().test {
+    fun `a board size with tied fastest results is returned once`() = runTest {
+        dao.insert(gameResult(duration = 12_000, boardSize = 4))
+        dao.insert(gameResult(duration = 12_000, boardSize = 4))
+
+        dao.observeBestPerBoardSize().test {
+            assertEquals(1, awaitItem().size)
+        }
+    }
+
+    @Test
+    fun `a slower result does not replace the best one`() = runTest {
+        dao.insert(gameResult(duration = 12_000, boardSize = 4))
+
+        dao.observeBestPerBoardSize().test {
+            assertEquals(listOf(12_000L), awaitItem().map(GameResultEntity::duration))
+
+            dao.insert(gameResult(duration = 45_000, boardSize = 4))
+
+            assertEquals(listOf(12_000L), awaitItem().map(GameResultEntity::duration))
+        }
+    }
+
+    @Test
+    fun `observeBestPerBoardSize emits again when a result is inserted`() = runTest {
+        dao.observeBestPerBoardSize().test {
             assertEquals(emptyList<GameResultEntity>(), awaitItem())
 
             dao.insert(gameResult(duration = 12_000, boardSize = 4))

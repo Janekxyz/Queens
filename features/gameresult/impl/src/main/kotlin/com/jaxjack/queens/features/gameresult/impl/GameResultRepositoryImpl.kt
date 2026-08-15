@@ -22,8 +22,8 @@ class GameResultRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun observeAll(): Flow<List<GameResult>> {
-        return gameResultDao.observeAll()
+    override fun observeBestPerBoardSize(): Flow<List<GameResult>> {
+        return gameResultDao.observeBestPerBoardSize()
             .map { list -> list.map { it.toDomain() } }
     }
 }
