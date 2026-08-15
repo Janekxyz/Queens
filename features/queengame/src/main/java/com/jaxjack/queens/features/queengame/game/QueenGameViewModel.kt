@@ -57,6 +57,7 @@ class QueenGameViewModel @AssistedInject constructor(
     }
 
     private fun restart() {
+        startedAt = timeProvider.elapsedRealtimeMillis()
         _viewState.update { initialState() }
     }
 
@@ -90,9 +91,10 @@ class QueenGameViewModel @AssistedInject constructor(
     }
 
     private fun saveResult(boardSize: Int) {
+        val duration = timeProvider.elapsedRealtimeMillis() - startedAt
         viewModelScope.launch {
             val gameResult = GameResultDraft(
-                duration = elapsedMilliseconds.value,
+                duration = duration,
                 boardSize = boardSize
             )
             gameResultRepository.insert(gameResult)
