@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.jaxjack.queens.features.leaderboard.impl"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
@@ -23,6 +23,12 @@ android {
     testOptions {
         unitTests.all { it.useJUnitPlatform() }
     }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE.md,LICENSE-notice.md}"
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -46,4 +52,12 @@ dependencies {
     testImplementation(project(":core:testing"))
     testRuntimeOnly(libs.junit5.platform.launcher)
     debugImplementation(libs.androidx.ui.tooling)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.kotlinx.coroutines.core)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

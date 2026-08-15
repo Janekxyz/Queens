@@ -34,9 +34,9 @@ import com.jaxjack.queens.styleguide.R
 @Composable
 internal fun LeaderboardScreen(
     modifier: Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: LeaderboardViewModel = hiltViewModel(),
 ) {
-    val viewModel: LeaderboardViewModel = hiltViewModel()
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val params = state.toParams()
 
@@ -61,8 +61,7 @@ private fun LeaderboardContent(
                 IconButton(onClick = onBackClick) {
                     Icon(
                         painter = painterResource(R.drawable.ic_back),
-                        // TODO implement content description
-                        contentDescription = null,
+                        contentDescription = stringResource(R.string.content_description_back),
                         tint = MaterialTheme.colorScheme.onPrimaryFixed
                     )
                 }
@@ -81,8 +80,8 @@ private fun LeaderboardContent(
         ) {
             when {
                 params.isLoading -> CircularProgressIndicator()
-                params.isEmpty -> LeaderboardEmptyContent()
                 params.isError -> LeaderboardErrorContent()
+                params.isEmpty -> LeaderboardEmptyContent()
                 else -> LeaderboardListContent(results = params.results)
             }
         }

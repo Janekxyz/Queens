@@ -15,4 +15,8 @@
     <string name="queen_game_success_next_game">Next game</string>
     <string name="game_configuration_queen_color_white">White queen</string>
     <string name="game_configuration_queen_color_black">Black queen</string>
+    <string name="content_description_back">Back</string>
+    <string name="content_description_leaderboard">Leaderboard</string>
+    <string name="content_description_decrease_board_size">Decrease board size</string>
+    <string name="content_description_increase_board_size">Increase board size</string>
 </resources>

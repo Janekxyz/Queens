@@ -7,6 +7,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Constraints
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
@@ -52,10 +53,12 @@ private fun BoardCell(
     content: @Composable BoxScope.() -> Unit
 ) {
     Box(
-        modifier = Modifier.drawBehind {
-            // TODO color should be moved to the proper class
-            drawRect(if ((position.x + position.y) % 2 == 0) boardTileWhite else boardTileGreen)
-        },
+        modifier = Modifier
+            .testTag(boardCellTestTag(position))
+            .drawBehind {
+                // TODO color should be moved to the proper class
+                drawRect(if ((position.x + position.y) % 2 == 0) boardTileWhite else boardTileGreen)
+            },
         contentAlignment = Alignment.Center,
         content = content
     )
@@ -64,3 +67,6 @@ private fun BoardCell(
 data class BoardParams(
     val board: Board
 )
+
+fun boardCellTestTag(position: BoardPosition): String =
+    "board_cell_${position.x}_${position.y}"

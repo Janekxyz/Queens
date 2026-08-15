@@ -56,9 +56,9 @@ import kotlin.math.floor
 internal fun GameConfigurationScreen(
     modifier: Modifier,
     onPlayClick: (Int, QueenColor) -> Unit,
-    onLeaderboardClick: () -> Unit
+    onLeaderboardClick: () -> Unit,
+    viewModel: GameConfigurationViewModel = hiltViewModel(),
 ) {
-    val viewModel: GameConfigurationViewModel = hiltViewModel()
 
     val minimumBoxSize = 48.dp
     val (screenWidth, screenHeight) = LocalWindowInfo.current.containerDpSize
@@ -119,8 +119,7 @@ private fun QueenGameContent(
                 Icon(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(R.drawable.ic_leaderboard),
-                    // TODO add content description
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.content_description_leaderboard),
                 )
             }
         }
@@ -204,6 +203,7 @@ private fun ConfigureBoardContent(
         ) {
             BoardSizeChangeButton(
                 icon = painterResource(R.drawable.ic_minus),
+                contentDescription = stringResource(R.string.content_description_decrease_board_size),
                 enabled = decreaseButtonEnabled,
                 containerColor = decreaseButtonContainerColor,
                 onClick = onDecreaseBoardSizeButtonClick
@@ -222,6 +222,7 @@ private fun ConfigureBoardContent(
 
             BoardSizeChangeButton(
                 icon = painterResource(R.drawable.ic_add),
+                contentDescription = stringResource(R.string.content_description_increase_board_size),
                 containerColor = increaseButtonContainerColor,
                 enabled = increaseButtonEnabled,
                 onClick = onIncreaseBoardSizeButtonClick
@@ -287,6 +288,7 @@ private fun QueenColorOption(
 @Composable
 fun BoardSizeChangeButton(
     icon: Painter,
+    contentDescription: String,
     containerColor: Color,
     enabled: Boolean,
     onClick: () -> Unit
@@ -304,7 +306,7 @@ fun BoardSizeChangeButton(
     ) {
         Icon(
             painter = icon,
-            contentDescription = "",
+            contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onPrimary
         )
     }
