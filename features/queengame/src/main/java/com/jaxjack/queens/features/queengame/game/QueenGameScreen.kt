@@ -149,24 +149,7 @@ private fun QueenGameContent(
                 }
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(R.drawable.ic_duration),
-                    contentDescription = stringResource(R.string.content_description_duration)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = timerParams().time,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+            DurationContent(timerParams = timerParams)
 
             Box(
                 modifier = Modifier
@@ -300,6 +283,28 @@ private fun QueenGameSuccessOverlay(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun DurationContent(timerParams: () -> QueenGameTimerParams) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            modifier = Modifier.size(24.dp),
+            painter = painterResource(R.drawable.ic_duration),
+            contentDescription = stringResource(R.string.content_description_duration)
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = timerParams().time,
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 }
 

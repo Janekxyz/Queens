@@ -1,5 +1,6 @@
 package com.jaxjack.queens.features.queengame.configuration
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -28,13 +29,13 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -197,7 +198,7 @@ private fun ConfigureBoardContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             BoardSizeChangeButton(
-                icon = painterResource(R.drawable.ic_minus),
+                icon = R.drawable.ic_minus,
                 contentDescription = stringResource(R.string.content_description_decrease_board_size),
                 enabled = decreaseButtonEnabled,
                 containerColor = decreaseButtonContainerColor,
@@ -216,7 +217,7 @@ private fun ConfigureBoardContent(
             Spacer(modifier = Modifier.width(16.dp))
 
             BoardSizeChangeButton(
-                icon = painterResource(R.drawable.ic_add),
+                icon = R.drawable.ic_add,
                 contentDescription = stringResource(R.string.content_description_increase_board_size),
                 containerColor = increaseButtonContainerColor,
                 enabled = increaseButtonEnabled,
@@ -228,7 +229,7 @@ private fun ConfigureBoardContent(
 
 @Composable
 private fun QueenColorContent(
-    options: List<QueenColorOptionParams>,
+    options: QueenColorOptionsParams,
     onQueenColorClick: (QueenColor) -> Unit,
 ) {
     Row(
@@ -245,7 +246,7 @@ private fun QueenColorContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            options.forEach { option ->
+            options.value.forEach { option ->
                 QueenColorOption(
                     params = option,
                     onClick = { onQueenColorClick(option.queenColor) }
@@ -260,14 +261,14 @@ private fun QueenColorOption(
     params: QueenColorOptionParams,
     onClick: () -> Unit,
 ) {
-    val borderColor by animateColorAsState(params.borderColor)
-    val shape = RoundedCornerShape(8.dp)
+    val animatedBorderColor by animateColorAsState(params.borderColor)
+    val shape = RoundedCornerShape(CORNER_RADIUS)
     Box(
         modifier = Modifier
             .size(56.dp)
             .clip(shape)
             .background(color = params.backgroundColor)
-            .border(width = 4.dp, color = borderColor, shape = shape)
+            .border(width = BORDER_WIDTH, color = animatedBorderColor, shape = shape)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -282,13 +283,12 @@ private fun QueenColorOption(
 
 @Composable
 fun BoardSizeChangeButton(
-    icon: Painter,
+    @DrawableRes icon: Int,
     contentDescription: String,
     containerColor: Color,
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val containerColor by animateColorAsState(containerColor)
     IconButton(
         modifier = Modifier.size(48.dp),
         shape = CircleShape,
@@ -300,13 +300,14 @@ fun BoardSizeChangeButton(
         onClick = onClick
     ) {
         Icon(
-            painter = icon,
+            painter = painterResource(icon),
             contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
 
+@Immutable
 data class GameConfigurationParams(
     val boardSizeText: String,
     val boardDimensionsText: String,
@@ -314,9 +315,15 @@ data class GameConfigurationParams(
     val decreaseButtonEnabled: Boolean,
     val increaseButtonContainerColor: Color,
     val increaseButtonEnabled: Boolean,
-    val queenColorOptions: List<QueenColorOptionParams>
+    val queenColorOptions: QueenColorOptionsParams
 )
 
+@Immutable
+data class QueenColorOptionsParams(
+    val value: List<QueenColorOptionParams>
+)
+
+@Immutable
 data class QueenColorOptionParams(
     val queenColor: QueenColor,
     val backgroundColor: Color,
@@ -324,3 +331,6 @@ data class QueenColorOptionParams(
     val borderColor: Color,
     val contentDescription: String
 )
+
+private val BORDER_WIDTH = 4.dp
+private val CORNER_RADIUS = 8.dp

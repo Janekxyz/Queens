@@ -26,7 +26,7 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
             QueensTheme.colors.tileLight
         },
         increaseButtonEnabled = increaseButtonEnabled,
-        queenColorOptions = QueenColor.entries.map { color ->
+        queenColorOptions = QueenColorOptionsParams(QueenColor.entries.map { color ->
             QueenColorOptionParams(
                 queenColor = color,
                 tint = color.tint,
@@ -41,7 +41,7 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
                 },
                 contentDescription = stringResource(color.contentDescription),
             )
-        }
+        })
     )
 }
 
