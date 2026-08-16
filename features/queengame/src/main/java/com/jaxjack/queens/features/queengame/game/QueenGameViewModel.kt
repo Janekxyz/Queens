@@ -14,11 +14,13 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -42,14 +44,19 @@ class QueenGameViewModel @AssistedInject constructor(
     private val _viewState = MutableStateFlow(initialState())
     val viewState: StateFlow<QueenGameViewState> = _viewState.asStateFlow()
 
-    private var startedAt = timeProvider.elapsedRealtimeMillis()
+    private val startedAt = MutableStateFlow(timeProvider.elapsedRealtimeMillis())
 
-    val elapsedMilliseconds: StateFlow<Long> = flow {
-        while (true) {
-            emit(timeProvider.elapsedRealtimeMillis() - startedAt)
-            delay(1.seconds)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val elapsedMilliseconds: StateFlow<Long> = startedAt
+        .flatMapLatest { start ->
+            flow {
+                while (true) {
+                    emit(timeProvider.elapsedRealtimeMillis() - start)
+                    delay(1.seconds)
+                }
+            }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
 
     fun onAction(action: QueenGameAction) = when (action) {
         QueenGameAction.RestartClick -> restart()
@@ -57,7 +64,7 @@ class QueenGameViewModel @AssistedInject constructor(
     }
 
     private fun restart() {
-        startedAt = timeProvider.elapsedRealtimeMillis()
+        startedAt.value = timeProvider.elapsedRealtimeMillis()
         _viewState.update { initialState() }
     }
 
@@ -88,7 +95,7 @@ class QueenGameViewModel @AssistedInject constructor(
         }
 
         if (!wasSolved && state.isSolved) {
-            val duration = timeProvider.elapsedRealtimeMillis() - startedAt
+            val duration = timeProvider.elapsedRealtimeMillis() - startedAt.value
             _viewState.update { it.copy(solvedDuration = duration) }
             saveResult(duration = duration, boardSize = state.board.size)
         }
