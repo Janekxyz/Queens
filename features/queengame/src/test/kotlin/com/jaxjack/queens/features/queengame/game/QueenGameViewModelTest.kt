@@ -7,6 +7,7 @@ import com.jaxjack.queens.core.testing.FakeTimeProvider
 import com.jaxjack.queens.core.testing.TestCoroutineExtension
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -233,6 +234,24 @@ class QueenGameViewModelTest {
         solve(viewModel)
 
         assertEquals(5_000, repository.inserted.single().duration)
+    }
+
+    @Test
+    fun `restart resets the elapsed time without waiting for the next tick`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.elapsedMilliseconds.test {
+            assertEquals(0L, awaitItem())
+
+            timeProvider.advanceBy(30_000)
+            advanceTimeBy(1_001)
+            assertEquals(30_000L, awaitItem())
+
+            viewModel.onAction(QueenGameAction.RestartClick)
+
+            assertEquals(0L, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
