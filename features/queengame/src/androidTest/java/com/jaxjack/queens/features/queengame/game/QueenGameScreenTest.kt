@@ -4,6 +4,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.click
@@ -19,6 +21,7 @@ import com.jaxjack.queens.gameresult.api.GameResultRepository
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.game.navigation.QueenGameKey
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
@@ -86,13 +89,13 @@ class QueenGameScreenTest {
     }
 
     @Test
-    fun `the success overlay reports the achieved time`() {
+    fun `the overlay and the stopped timer both report the achieved time`() {
         setGameScreen()
         timeProvider.elapsedRealtimeMillis = 65_000
 
         solve()
 
-        composeRule.onNodeWithText("1:05").assertIsDisplayed()
+        composeRule.onAllNodesWithText("1:05").assertCountEquals(2)
     }
 
     @Test
@@ -137,12 +140,14 @@ class QueenGameScreenTest {
             timeProvider = timeProvider,
         )
         composeRule.setContent {
-            QueenGameScreen(
-                modifier = Modifier,
-                viewModel = viewModel,
-                onBackClick = {},
-                onNextGameClick = onNextGameClick,
-            )
+            QueensTheme {
+                QueenGameScreen(
+                    modifier = Modifier,
+                    viewModel = viewModel,
+                    onBackClick = {},
+                    onNextGameClick = onNextGameClick,
+                )
+            }
         }
     }
 }

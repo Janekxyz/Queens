@@ -14,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -139,15 +140,17 @@ class GameConfigurationScreenTest {
     private fun setConfigurationScreen() {
         val viewModel = GameConfigurationViewModel()
         composeRule.setContent {
-            GameConfigurationScreen(
-                modifier = Modifier,
-                onPlayClick = { boardSize, queenColor ->
-                    playedBoardSize = boardSize
-                    playedQueenColor = queenColor
-                },
-                onLeaderboardClick = { leaderboardClicks++ },
-                viewModel = viewModel,
-            )
+            QueensTheme {
+                GameConfigurationScreen(
+                    modifier = Modifier,
+                    onPlayClick = { boardSize, queenColor ->
+                        playedBoardSize = boardSize
+                        playedQueenColor = queenColor
+                    },
+                    onLeaderboardClick = { leaderboardClicks++ },
+                    viewModel = viewModel,
+                )
+            }
         }
     }
 }

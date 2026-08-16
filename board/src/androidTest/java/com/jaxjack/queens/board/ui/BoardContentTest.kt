@@ -1,6 +1,7 @@
 package com.jaxjack.queens.board.ui
 
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
@@ -12,6 +13,7 @@ import androidx.compose.ui.unit.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -45,10 +47,12 @@ class BoardContentTest {
     @Test
     fun `renders the provided content inside every cell`() {
         composeRule.setContent {
-            BoardContent(
-                params = BoardParams(board = Board.create(size = 4)),
-                cell = { position -> Text(text = "${position.x}${position.y}") }
-            )
+            QueensTheme {
+                BoardContent(
+                    params = boardParams(size = 4),
+                    cell = { position -> Text(text = "${position.x}${position.y}") }
+                )
+            }
         }
 
         forEachSquare(size = 4) { position ->
@@ -99,9 +103,18 @@ class BoardContentTest {
 
     private fun setBoard(size: Int) {
         composeRule.setContent {
-            BoardContent(params = BoardParams(board = Board.create(size = size)))
+            QueensTheme {
+                BoardContent(params = boardParams(size = size))
+            }
         }
     }
+
+    @Composable
+    private fun boardParams(size: Int) = BoardParams(
+        board = Board.create(size = size),
+        lightTileColor = QueensTheme.colors.tileLight,
+        darkTileColor = QueensTheme.colors.tileDark,
+    )
 
     private fun cellBounds(position: BoardPosition) =
         composeRule.onNodeWithTag(boardCellTestTag(position)).getUnclippedBoundsInRoot()

@@ -15,6 +15,7 @@ import com.jaxjack.queens.gameresult.api.GameResult
 import com.jaxjack.queens.gameresult.api.GameResultDraft
 import com.jaxjack.queens.gameresult.api.GameResultRepository
 import com.jaxjack.queens.styleguide.R
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flow
@@ -98,11 +99,13 @@ class LeaderboardScreenTest {
     private fun setLeaderboardScreen(repository: GameResultRepository = this.repository) {
         val viewModel = LeaderboardViewModel(repository)
         composeRule.setContent {
-            LeaderboardScreen(
-                modifier = Modifier,
-                onBackClick = { backClicks++ },
-                viewModel = viewModel,
-            )
+            QueensTheme {
+                LeaderboardScreen(
+                    modifier = Modifier,
+                    onBackClick = { backClicks++ },
+                    viewModel = viewModel,
+                )
+            }
         }
     }
 }
