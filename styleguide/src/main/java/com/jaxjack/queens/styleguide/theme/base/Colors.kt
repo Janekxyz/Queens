@@ -16,6 +16,8 @@ internal val LightColorScheme = QueensColors(
     tileLight = whiteCreamy,
     tileDark = green,
     conflict = red,
+    queenLight = white,
+    queenDark = black
 )
 
 internal val DarkColorScheme = QueensColors(
@@ -27,6 +29,8 @@ internal val DarkColorScheme = QueensColors(
     tileLight = whiteCreamy,
     tileDark = green,
     conflict = red,
+    queenLight = white,
+    queenDark = black
 )
 
 @Stable
@@ -38,6 +42,8 @@ class QueensColors(
     overlay: Color,
     tileLight: Color,
     tileDark: Color,
+    queenLight: Color,
+    queenDark: Color,
     conflict: Color
 ) {
 
@@ -65,6 +71,11 @@ class QueensColors(
     var conflict by mutableStateOf(conflict)
         internal set
 
+    var queenLight by mutableStateOf(queenLight)
+        internal set
+
+    var queenDark by mutableStateOf(queenDark)
+        internal set
 
     fun copy(): QueensColors = QueensColors(
         background = background,
@@ -74,7 +85,9 @@ class QueensColors(
         tileLight = tileLight,
         tileDark = tileDark,
         overlay = overlay,
-        conflict = conflict
+        conflict = conflict,
+        queenLight = queenLight,
+        queenDark = queenDark
     )
 
     fun update(other: QueensColors) {

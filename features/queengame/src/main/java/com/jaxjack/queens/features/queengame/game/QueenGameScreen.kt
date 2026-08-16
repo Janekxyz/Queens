@@ -63,7 +63,6 @@ import com.jaxjack.queens.board.ui.BoardContent
 import com.jaxjack.queens.board.ui.BoardParams
 import com.jaxjack.queens.styleguide.R
 import com.jaxjack.queens.styleguide.theme.QueensTheme
-import com.jaxjack.queens.styleguide.theme.base.queenBlack
 
 @Composable
 internal fun QueenGameScreen(
@@ -237,7 +236,7 @@ private fun QueenGameSuccessOverlay(
                     Text(
                         text = params.title,
                         style = MaterialTheme.typography.headlineLarge,
-                        color = queenBlack
+                        color = QueensTheme.colors.content
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
@@ -251,7 +250,7 @@ private fun QueenGameSuccessOverlay(
                         style = MaterialTheme.typography.bodyMedium.copy(
                             textAlign = TextAlign.Center
                         ),
-                        color = queenBlack
+                        color = QueensTheme.colors.content
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
