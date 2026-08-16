@@ -109,7 +109,7 @@ private fun QueenGameContent(
             )
             Spacer(modifier = Modifier.weight(1f))
             IconButton(
-                modifier = Modifier.background(Color.LightGray, CircleShape),
+                modifier = Modifier.background(QueensTheme.colors.surface, CircleShape),
                 onClick = onLeaderboardClick
             ) {
                 Icon(
@@ -190,7 +190,7 @@ private fun ConfigureBoardContent(
         Row(
             modifier = Modifier
                 .background(
-                    color = Color.LightGray,
+                    color = QueensTheme.colors.surface,
                     shape = CircleShape
                 )
                 .padding(4.dp),
