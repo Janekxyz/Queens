@@ -16,7 +16,12 @@ import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,17 +51,23 @@ class QueenGameViewModel @AssistedInject constructor(
 
     private val startedAt = MutableStateFlow(timeProvider.elapsedRealtimeMillis())
 
+    private val finalDuration: Flow<Long?> = _viewState
+        .map { state -> state.solvedDuration.takeIf { state.isSolved } }
+        .distinctUntilChanged()
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val elapsedMilliseconds: StateFlow<Long> = startedAt
-        .flatMapLatest { start ->
-            flow {
-                while (true) {
-                    emit(timeProvider.elapsedRealtimeMillis() - start)
-                    delay(1.seconds)
-                }
-            }
+    val elapsedMilliseconds: StateFlow<Long> = combine(startedAt, finalDuration, ::Pair)
+        .flatMapLatest { (start, finalDuration) ->
+            finalDuration?.let { flowOf(it) } ?: ticker(start)
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)
+
+    private fun ticker(startedAt: Long): Flow<Long> = flow {
+        while (true) {
+            emit(timeProvider.elapsedRealtimeMillis() - startedAt)
+            delay(1.seconds)
+        }
+    }
 
     fun onAction(action: QueenGameAction) = when (action) {
         QueenGameAction.RestartClick -> restart()
@@ -87,17 +98,20 @@ class QueenGameViewModel @AssistedInject constructor(
         val wasSolved = _viewState.value.isSolved
         val state = _viewState.updateAndGet { state ->
             val queens = state.queens.toMutableSet().apply { action() }
-            val attackMap = QueenAttackMap.of(state.board.size, queens)
-            state.copy(
+            val updated = state.copy(
                 queens = queens,
-                queenAttackMap = attackMap
+                queenAttackMap = QueenAttackMap.of(state.board.size, queens)
             )
+
+            if (!wasSolved && updated.isSolved) {
+                updated.copy(solvedDuration = timeProvider.elapsedRealtimeMillis() - startedAt.value)
+            } else {
+                updated
+            }
         }
 
         if (!wasSolved && state.isSolved) {
-            val duration = timeProvider.elapsedRealtimeMillis() - startedAt.value
-            _viewState.update { it.copy(solvedDuration = duration) }
-            saveResult(duration = duration, boardSize = state.board.size)
+            saveResult(duration = state.solvedDuration, boardSize = state.board.size)
         }
     }
 

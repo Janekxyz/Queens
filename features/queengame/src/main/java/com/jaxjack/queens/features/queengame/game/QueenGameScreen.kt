@@ -10,6 +10,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -148,6 +149,25 @@ private fun QueenGameContent(
                 }
             )
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp, horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(R.drawable.ic_duration),
+                    contentDescription = stringResource(R.string.content_description_duration)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = timerParams().time,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .weight(1f)
@@ -167,22 +187,6 @@ private fun QueenGameContent(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Duration",
-                style = MaterialTheme.typography.headlineLarge.copy(
-                    textAlign = TextAlign.Center
-                )
-            )
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = timerParams().time,
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    textAlign = TextAlign.Center
-                )
-            )
         }
 
         params.successParams?.let { successParams ->

@@ -237,6 +237,40 @@ class QueenGameViewModelTest {
     }
 
     @Test
+    fun `the timer stops once the board is solved`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.elapsedMilliseconds.test {
+            assertEquals(0L, awaitItem())
+
+            timeProvider.advanceBy(12_000)
+            solve(viewModel)
+            assertEquals(12_000L, awaitItem())
+
+            timeProvider.advanceBy(30_000)
+            advanceTimeBy(5_000)
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `restarting after solving starts the timer again`() = runTest {
+        val viewModel = createViewModel()
+        timeProvider.advanceBy(12_000)
+        solve(viewModel)
+
+        viewModel.elapsedMilliseconds.test {
+            assertEquals(12_000L, awaitItem())
+
+            viewModel.onAction(QueenGameAction.RestartClick)
+
+            assertEquals(0L, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `restart resets the elapsed time without waiting for the next tick`() = runTest {
         val viewModel = createViewModel()
 

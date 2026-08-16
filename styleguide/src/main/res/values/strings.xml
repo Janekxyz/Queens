@@ -17,6 +17,7 @@
     <string name="game_configuration_queen_color_black">Black queen</string>
     <string name="content_description_back">Back</string>
     <string name="content_description_leaderboard">Leaderboard</string>
+    <string name="content_description_duration">Duration</string>
     <string name="content_description_restart">Restart game</string>
     <string name="content_description_tile_free">Row %1$d, column %2$d, free</string>
     <string name="content_description_tile_attacked">Row %1$d, column %2$d, attacked</string>
