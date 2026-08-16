@@ -17,11 +17,16 @@ import com.jaxjack.queens.features.queengame.game.navigation.queenGameEntry
 @Composable
 fun QueensNavDisplay(modifier: Modifier = Modifier) {
     val backStack = rememberNavBackStack(GameConfigurationKey)
+    val popBackStack = {
+        if (backStack.size > 1) {
+            backStack.removeLastOrNull()
+        }
+    }
 
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = popBackStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator(),
@@ -36,11 +41,11 @@ fun QueensNavDisplay(modifier: Modifier = Modifier) {
                 }
             )
             queenGameEntry(
-                onBackClick = { backStack.removeLastOrNull() },
-                onNextGameClick = { backStack.removeLastOrNull() }
+                onBackClick = popBackStack,
+                onNextGameClick = popBackStack
             )
             leaderboardEntry(
-                onBackClick = { backStack.removeLastOrNull() }
+                onBackClick = popBackStack
             )
         },
     )
