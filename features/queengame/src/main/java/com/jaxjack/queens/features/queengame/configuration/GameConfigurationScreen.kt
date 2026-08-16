@@ -45,8 +45,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.styleguide.R
-import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
-import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import kotlin.math.floor
 
 
@@ -145,8 +144,8 @@ private fun QueenGameContent(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = boardTileGreen,
-                contentColor = boardTileWhite
+                containerColor = QueensTheme.colors.tileDark,
+                contentColor = QueensTheme.colors.tileLight
             ),
             onClick = onPlayClick,
             content = {

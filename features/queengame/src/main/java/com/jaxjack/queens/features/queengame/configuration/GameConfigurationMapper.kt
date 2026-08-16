@@ -7,9 +7,7 @@ import androidx.compose.ui.res.stringResource
 import com.jaxjack.queens.features.queengame.QueenColor
 import com.jaxjack.queens.features.queengame.tint
 import com.jaxjack.queens.styleguide.R
-import com.jaxjack.queens.styleguide.theme.base.boardAttackedDot
-import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
-import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 
 @Composable
 fun GameConfigurationViewState.toParams(): GameConfigurationParams {
@@ -17,15 +15,15 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
         boardSizeText = boardSize.toString(),
         boardDimensionsText = stringResource(R.string.game_configuration_board_dimensions, boardSize),
         decreaseButtonContainerColor = if (decreaseButtonEnabled) {
-            boardTileGreen
+            QueensTheme.colors.tileDark
         } else {
-            boardTileWhite
+            QueensTheme.colors.tileLight
         },
         decreaseButtonEnabled = decreaseButtonEnabled,
         increaseButtonContainerColor = if (increaseButtonEnabled) {
-            boardTileGreen
+            QueensTheme.colors.tileDark
         } else {
-            boardTileWhite
+            QueensTheme.colors.tileLight
         },
         increaseButtonEnabled = increaseButtonEnabled,
         queenColorOptions = QueenColor.entries.map { color ->
@@ -33,11 +31,11 @@ fun GameConfigurationViewState.toParams(): GameConfigurationParams {
                 queenColor = color,
                 tint = color.tint,
                 backgroundColor = when(color) {
-                    QueenColor.White -> boardTileGreen
-                    QueenColor.Black -> boardTileWhite
+                    QueenColor.White -> QueensTheme.colors.tileDark
+                    QueenColor.Black -> QueensTheme.colors.tileLight
                 },
                 borderColor = if (color == queenColor) {
-                    boardAttackedDot
+                    QueensTheme.colors.border
                 } else {
                     Color.Transparent
                 },

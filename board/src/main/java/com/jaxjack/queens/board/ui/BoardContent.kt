@@ -12,8 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Constraints
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
-import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
-import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import kotlin.math.min
 
 @Composable
@@ -70,8 +69,8 @@ private fun BoardCell(
 
 data class BoardParams(
     val board: Board,
-    val lightTileColor: Color = boardTileWhite,
-    val darkTileColor: Color = boardTileGreen,
+    val lightTileColor: Color,
+    val darkTileColor: Color,
 )
 
 fun boardCellTestTag(position: BoardPosition): String =

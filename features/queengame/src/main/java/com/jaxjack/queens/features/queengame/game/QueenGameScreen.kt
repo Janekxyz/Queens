@@ -61,8 +61,7 @@ import com.jaxjack.queens.board.BoardPosition
 import com.jaxjack.queens.board.ui.BoardContent
 import com.jaxjack.queens.board.ui.BoardParams
 import com.jaxjack.queens.styleguide.R
-import com.jaxjack.queens.styleguide.theme.base.boardTileGreen
-import com.jaxjack.queens.styleguide.theme.base.boardTileWhite
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 import com.jaxjack.queens.styleguide.theme.base.queenBlack
 
 @Composable
@@ -226,7 +225,7 @@ private fun QueenGameSuccessOverlay(
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp),
                 shape = RoundedCornerShape(28.dp),
-                color = boardTileWhite
+                color = QueensTheme.colors.tileLight
             ) {
                 Column(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 32.dp),
@@ -236,7 +235,7 @@ private fun QueenGameSuccessOverlay(
                         modifier = Modifier
                             .size(88.dp)
                             .clip(CircleShape)
-                            .background(color = boardTileGreen),
+                            .background(color = QueensTheme.colors.tileDark),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -257,7 +256,7 @@ private fun QueenGameSuccessOverlay(
                     Text(
                         text = params.time,
                         style = MaterialTheme.typography.displaySmall,
-                        color = boardTileGreen
+                        color = QueensTheme.colors.tileDark
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
@@ -273,8 +272,8 @@ private fun QueenGameSuccessOverlay(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = boardTileGreen,
-                            contentColor = boardTileWhite
+                            containerColor = QueensTheme.colors.tileDark,
+                            contentColor = QueensTheme.colors.tileLight
                         ),
                         onClick = onNextGameClick
                     ) {
@@ -286,7 +285,7 @@ private fun QueenGameSuccessOverlay(
                     Spacer(modifier = Modifier.height(4.dp))
                     TextButton(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.textButtonColors(contentColor = boardTileGreen),
+                        colors = ButtonDefaults.textButtonColors(contentColor = QueensTheme.colors.tileDark),
                         onClick = onRestartClick
                     ) {
                         Text(

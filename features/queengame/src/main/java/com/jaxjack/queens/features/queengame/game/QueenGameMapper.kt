@@ -7,15 +7,15 @@ import androidx.compose.ui.res.stringResource
 import com.jaxjack.queens.board.ui.BoardParams
 import com.jaxjack.queens.features.queengame.tint
 import com.jaxjack.queens.styleguide.R
-import com.jaxjack.queens.styleguide.theme.base.boardAttackedDot
-import com.jaxjack.queens.styleguide.theme.base.boardAttackedOverlay
-import com.jaxjack.queens.styleguide.theme.base.boardQueenConflict
+import com.jaxjack.queens.styleguide.theme.QueensTheme
 
 @Composable
 internal fun QueenGameViewState.toParams(): QueenGameParams {
     return QueenGameParams(
         boardParams = BoardParams(
-            board = board
+            board = board,
+            lightTileColor = QueensTheme.colors.tileLight,
+            darkTileColor = QueensTheme.colors.tileDark
         ),
         headerParams = QueenGameHeaderParams(
             queensLeft = stringResource(R.string.queen_game_queens_left, board.size - queens.size)
@@ -48,11 +48,11 @@ internal fun QueenGameViewState.toParams(): QueenGameParams {
                     position.x + 1
                 ),
                 backgroundColor = when {
-                    hasQueen && isConflicted -> boardQueenConflict
-                    isAttacked -> boardAttackedOverlay
+                    hasQueen && isConflicted -> QueensTheme.colors.conflict
+                    isAttacked -> QueensTheme.colors.overlay
                     else -> Color.Transparent
                 },
-                attackedDotColor = boardAttackedDot.takeIf { isAttacked && !hasQueen },
+                attackedDotColor = QueensTheme.colors.border.takeIf { isAttacked && !hasQueen },
                 icon = painterResource(R.drawable.ic_queen)
                     .takeIf { hasQueen },
                 iconTint = queenColor.tint,
