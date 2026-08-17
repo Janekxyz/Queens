@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Constraints
 import com.jaxjack.queens.board.Board
 import com.jaxjack.queens.board.BoardPosition
-import com.jaxjack.queens.styleguide.theme.QueensTheme
 import kotlin.math.min
 
 @Composable
