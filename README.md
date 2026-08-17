@@ -11,6 +11,9 @@ project root; no local configuration beyond `local.properties` pointing at your 
 
 ```bash
 ./gradlew :app:installDebug          # build and install on a connected device or emulator
+./gradlew testDebugUnitTest          # 64 JVM unit tests
+./gradlew connectedDebugAndroidTest  # 38 instrumented tests (needs a device or emulator)
+./gradlew build                      # full build including lint
 ```
 
 There is an apk file named `game.apk` available in the sources so you can download it and put it on the device
@@ -111,7 +114,7 @@ cross-feature events.
 
 ## Testing
 
-**61 unit tests** on the JVM (JUnit 5, Turbine, coroutines-test) and **38 instrumented tests**
+**64 unit tests** on the JVM (JUnit 5, Turbine, coroutines-test) and **38 instrumented tests**
 (JUnit 4 with `AndroidJUnit4`, Compose UI test).
 
 | Suite | Covers |
